@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="ChocolateyExplorer.WPF.Views.Sources"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" Width="300"
+             DataContext="{Binding Source={StaticResource Locator}, Path=Sources}">
+    <DockPanel LastChildFill="true">
+        <Label Content="Chocolatey Sources" DockPanel.Dock="Top" />
+        <Grid HorizontalAlignment="Stretch" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Label Content="Id" Grid.Column="0" Grid.Row="0" />
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding NewSourceId}" />
+            <Label Content="Location" Grid.Column="0" Grid.Row="1" />
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewSourceLocation}" />
+            <Label Content="Nuget Feed" Grid.Column="0" Grid.Row="2" />
+            <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding IsNewSourceNuget}" />
+        </Grid>
+        <Button Content="Add Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" />
+        <ListView ItemsSource="{Binding Sources}" SelectionMode="Single" SelectedItem="{Binding SelectedChocolateySource}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location.AbsoluteUri, Mode=OneWay}" />
+                </GridView>
+            </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Remove"
+            Command="{Binding RemoveSourceCommand}"
+            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+    </DockPanel>
+</UserControl>

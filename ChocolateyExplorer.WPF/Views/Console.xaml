@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="ChocolateyExplorer.WPF.ViewModel.Console"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             DataContext="{Binding Source={StaticResource Locator}, Path=Console}">
+    <TextBox 
+        FontFamily="Consolas" 
+        AcceptsReturn="True" 
+        Background="#FF012456" 
+        Foreground="White"
+        Text="{Binding ConsoleOutput, Mode=OneWay}" 
+        IsReadOnly="True"
+        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+        ScrollViewer.VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged"  />
+</UserControl>

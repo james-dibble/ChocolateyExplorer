@@ -1,0 +1,78 @@
+﻿<UserControl xmlns:ViewModel="clr-namespace:ChocolateyExplorer.WPF.ViewModel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChocolateyExplorer.WPF.Views;assembly=ChocolateyExplorer.WPF"  x:Class="ChocolateyExplorer.WPF.Views.Packages" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"  >
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <Binding Path="Packages" Source="{StaticResource Locator}"/>
+    </UserControl.DataContext>
+    <DockPanel LastChildFill="true">
+        <ToolBarTray DockPanel.Dock="Top" HorizontalAlignment="Right">
+            <ToolBar>
+                <Label Content="Search" HorizontalAlignment="Right" />
+                <TextBox Width="80" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding SearchPackagesCommand}"></KeyBinding>
+                    </TextBox.InputBindings>
+                </TextBox>
+            </ToolBar>
+        </ToolBarTray>
+        <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
+        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel LastChildFill="false" />
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <Label Content="{Binding StatusMessage}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <ProgressBar IsIndeterminate="True" Height="20" Width="90" Visibility="{Binding IsWorking, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Number of Packages" />
+                    <Label Content="{Binding Packages.Count}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TreeView ItemsSource="{Binding Packages}" Grid.Column="0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedItemChanged">
+                        <cmd:EventToCommand Command="{Binding SetSelectedPackageCommand}" PassEventArgsToCommand="True" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Versions}">
+                        <TextBlock Text="{Binding Id}" />
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Version}" />
+                            </DataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <StackPanel Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <Label Content="{Binding SelectedPackage.Id}"/>
+                <Label Content="{Binding SelectedPackage.Title}"/>
+                <Label Content="{Binding SelectedPackage.Version}"/>
+                <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</UserControl>
