@@ -7,7 +7,7 @@
              d:DesignHeight="300" Width="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=Sources}">
     <DockPanel LastChildFill="true">
-        <Label Content="Chocolatey Sources" DockPanel.Dock="Top" />
+        <Label Content="Chocolatey Sources" DockPanel.Dock="Top" Style="{DynamicResource Title}" />
         <Grid HorizontalAlignment="Stretch" DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -18,11 +18,11 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Content="Id" Grid.Column="0" Grid.Row="0" />
+            <Label Content="Id" Grid.Column="0" Grid.Row="0" Style="{DynamicResource Title}" />
             <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding NewSourceId}" />
-            <Label Content="Location" Grid.Column="0" Grid.Row="1" />
+            <Label Content="Location" Grid.Column="0" Grid.Row="1" Style="{DynamicResource Title}" />
             <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewSourceLocation}" />
-            <Label Content="Nuget Feed" Grid.Column="0" Grid.Row="2" />
+            <Label Content="Nuget Feed" Grid.Column="0" Grid.Row="2" Style="{DynamicResource Title}" />
             <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding IsNewSourceNuget}" />
         </Grid>
         <Button Content="Add Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" />

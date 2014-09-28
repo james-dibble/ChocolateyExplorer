@@ -69,10 +69,14 @@
                 </TreeView.ItemTemplate>
             </TreeView>
             <StackPanel Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <Label Content="Id" Style="{DynamicResource Title}" />
                 <Label Content="{Binding SelectedPackage.Id}"/>
+                <Label Content="Title" Style="{DynamicResource Title}" />
                 <Label Content="{Binding SelectedPackage.Title}"/>
+                <Label Content="Version" Style="{DynamicResource Title}" />
                 <Label Content="{Binding SelectedPackage.Version}"/>
-                <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" />
+                <Label Content="Description" Style="{DynamicResource Title}" />
+                <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
                 <Button Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" />
             </StackPanel>
         </Grid>
