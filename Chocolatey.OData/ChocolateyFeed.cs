@@ -100,6 +100,7 @@
             var packages = results.OrderBy(p => p.Id)
                                   .ThenByDescending(p => p.Version)
                                   .DistinctBy(p => p.Id)
+                                  .AsParallel()
                                   .Select(p => new ChocolateyPackage
                                   {
                                       Id = p.Id,

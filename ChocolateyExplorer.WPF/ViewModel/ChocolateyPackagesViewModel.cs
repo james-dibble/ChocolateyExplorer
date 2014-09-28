@@ -38,16 +38,20 @@
             this._consoleViewModel = consoleViewModel;
             this._installer = installer;
 
-            this._sourcesViewModel.SelectedSourceChanged += async newSource => await this.HandleSelectedSourceChanged(newSource);
+            this._sourcesViewModel.SelectedSourceChanged += newSource => this.HandleSelectedSourceChanged(newSource);
 
             this.Packages = new ObservableCollection<ChocolateyPackage>();
-            this.InstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(async package => await this.InstallPackage(package));
-            this.SearchPackagesCommand = new RelayCommand(async () => await this.SearchPackages());
+            this.InstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(
+                async package => await this.InstallPackage(package),
+                package => package != null);
+            this.SearchPackagesCommand = new RelayCommand(async () => await this.SearchPackages(), () => this._feed != null && !this.IsWorking);
             this.SetSelectedPackageCommand = new RelayCommand<RoutedPropertyChangedEventArgs<object>>(
                 package =>
                 {
                     this.SelectedPackage = package.NewValue as ChocolateyPackageVersion;
                 });
+            this.LoadAllPackagesCommand = new RelayCommand(async () => await this.LoadPackages(), () => this._feed != null && !this.IsWorking);
+
             this.IsWorking = false;
             this.CanSelectPackage = false;
             this.StatusMessage = "Ready";
@@ -57,9 +61,11 @@
 
         public ICommand InstallPackageCommand { get; private set; }
 
-        public ICommand SearchPackagesCommand { get; private set; }
+        public RelayCommand SearchPackagesCommand { get; private set; }
 
         public ICommand SetSelectedPackageCommand { get; private set; }
+
+        public RelayCommand LoadAllPackagesCommand { get; private set; }
 
         public bool IsWorking
         {
@@ -77,6 +83,8 @@
                 }
 
                 this.RaisePropertyChanged(() => this.IsWorking);
+                this.LoadAllPackagesCommand.RaiseCanExecuteChanged();
+                this.SearchPackagesCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -169,25 +177,25 @@
             this.StatusMessage = "Ready";
         }
 
-        private async Task HandleSelectedSourceChanged(ChocolateySource source)
+        private void HandleSelectedSourceChanged(ChocolateySource source)
         {
             this.Packages.Clear();
-
-            if (source == null)
-            {
-                return;
-            }
-
+            
             if (this._feed != null)
             {
                 this._feed.PageOfPackagesLoaded -= this.OnPageOfPackagesLoaded;
             }
 
-            this._feed = this._feedFactory.Create(source);
+            this._feed = null;
 
-            this._feed.PageOfPackagesLoaded += this.OnPageOfPackagesLoaded;
-
-            await this.LoadPackages();
+            if (source != null)
+            {
+                this._feed = this._feedFactory.Create(source);
+                this._feed.PageOfPackagesLoaded += this.OnPageOfPackagesLoaded;
+            }
+            
+            this.LoadAllPackagesCommand.RaiseCanExecuteChanged();
+            this.SearchPackagesCommand.RaiseCanExecuteChanged();
         }
 
         private async Task SearchPackages()

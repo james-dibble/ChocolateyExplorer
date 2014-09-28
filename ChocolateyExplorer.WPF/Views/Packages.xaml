@@ -15,8 +15,9 @@
         <Binding Path="Packages" Source="{StaticResource Locator}"/>
     </UserControl.DataContext>
     <DockPanel LastChildFill="true">
-        <ToolBarTray DockPanel.Dock="Top" HorizontalAlignment="Right">
-            <ToolBar>
+        <ToolBarTray DockPanel.Dock="Top" HorizontalAlignment="Left">
+            <ToolBar ToolBarTray.IsLocked="True">
+                <Button Content="Load all packages" Command="{Binding LoadAllPackagesCommand}" />
                 <Label Content="Search" HorizontalAlignment="Right" />
                 <TextBox Width="80" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
@@ -50,7 +51,7 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <TreeView ItemsSource="{Binding Packages}" Grid.Column="0">
+            <TreeView ItemsSource="{Binding Packages}" Grid.Column="0" IsEnabled="{Binding CanSelectPackage}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectedItemChanged">
                         <cmd:EventToCommand Command="{Binding SetSelectedPackageCommand}" PassEventArgsToCommand="True" />
@@ -72,6 +73,7 @@
                 <Label Content="{Binding SelectedPackage.Title}"/>
                 <Label Content="{Binding SelectedPackage.Version}"/>
                 <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" />
+                <Button Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" />
             </StackPanel>
         </Grid>
     </DockPanel>
