@@ -1,6 +1,7 @@
 Chocolatey Explorer
 ==================
 A little GUI for reading Chocolatey feeds and installing packages
+[![Build status](https://ci.appveyor.com/api/projects/status/r3h6ou8b8doydef2)](https://ci.appveyor.com/project/james-dibble/chocolateyexplorer)
 
 How to Install
 ------------------
