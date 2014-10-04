@@ -6,6 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" Width="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=Sources}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <DockPanel LastChildFill="true">
         <Label Content="Chocolatey Sources" DockPanel.Dock="Top" Style="{DynamicResource Title}" />
         <Grid HorizontalAlignment="Stretch" DockPanel.Dock="Top">
@@ -25,7 +28,8 @@
             <Label Content="Nuget Feed" Grid.Column="0" Grid.Row="2" Style="{DynamicResource Title}" />
             <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding IsNewSourceNuget}" />
         </Grid>
-        <Button Content="Add Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" />
+        <Button Content="Add Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" Visibility="{Binding IsAddingSource, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Button Content="Update Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" Visibility="{Binding CanEditSource, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <ListView ItemsSource="{Binding Sources}" SelectionMode="Single" SelectedItem="{Binding SelectedChocolateySource}">
             <ListView.View>
                 <GridView>

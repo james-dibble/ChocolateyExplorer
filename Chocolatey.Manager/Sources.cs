@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Xml.Linq;
     using Chocolatey.DomainModel;
@@ -18,13 +19,18 @@
 
         public IEnumerable<ChocolateySource> GetSources()
         {
+            if (!File.Exists(ConfigurationLocation))
+            {
+                throw new InvalidOperationException("No Chocolatey sources directory exists in the default location");
+            }
+
             var config = XDocument.Load(ConfigurationLocation);
 
             var sources = config.Descendants("source").Select(s => new ChocolateySource 
             { 
                 Name = s.Attribute("id").Value, 
                 Location = new Uri(s.Attribute("value").Value),
-                IsNugetFeed = s.Attributes().Any(a => a.Name == "nuget") ? s.Attribute("nuget").Value == "true" : false
+                IsNugetFeed = s.Attributes().Any(a => a.Name == "nuget") && s.Attribute("nuget").Value == "true"
             });
 
             return sources;
