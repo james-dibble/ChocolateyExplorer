@@ -52,9 +52,9 @@
                 });
             this.LoadAllPackagesCommand = new RelayCommand(async () => await this.LoadPackages(), () => this._feed != null && !this.IsWorking);
 
-            this.IsWorking = false;
-            this.CanSelectPackage = false;
-            this.StatusMessage = "Ready";
+            this._isWorking = false;
+            this._canSelectPackage = false;
+            this._statusMessage = "Ready";
         }
 
         public ObservableCollection<ChocolateyPackage> Packages { get; private set; }

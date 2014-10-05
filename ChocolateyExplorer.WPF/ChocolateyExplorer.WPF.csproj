@@ -111,6 +111,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ViewModel\ChocolateyPackagesViewModel.cs" />
     <Compile Include="ViewModel\ChocolateySourcesViewModel.cs" />
     <Compile Include="ViewModel\ConsoleViewModel.cs" />

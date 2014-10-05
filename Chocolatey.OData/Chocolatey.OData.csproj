@@ -58,6 +58,7 @@
     <Compile Include="ChocolateyFeed.cs" />
     <Compile Include="ChocolateyFeedFactory.cs" />
     <Compile Include="ChocolateyNugetFeed.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IChocolateyFeed.cs" />
     <Compile Include="IChocolateyFeedFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
