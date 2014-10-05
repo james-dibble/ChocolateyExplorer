@@ -14,8 +14,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C9B7351E-EAF9-48BB-A592-1A3A1A052D9C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		ChocolateyExplorer.WPF.Installer.ps1 = ChocolateyExplorer.WPF.Installer.ps1
-		ChocolateyExplorer.WPF.nuspec = ChocolateyExplorer.WPF.nuspec
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
