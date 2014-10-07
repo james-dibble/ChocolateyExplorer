@@ -15,17 +15,15 @@
         <Binding Path="Packages" Source="{StaticResource Locator}"/>
     </UserControl.DataContext>
     <DockPanel LastChildFill="true">
-        <ToolBarTray DockPanel.Dock="Top" HorizontalAlignment="Left">
-            <ToolBar ToolBarTray.IsLocked="True">
-                <Button Content="Load all packages" Command="{Binding LoadAllPackagesCommand}" />
-                <Label Content="Search" HorizontalAlignment="Right" />
-                <TextBox Width="80" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <TextBox.InputBindings>
-                        <KeyBinding Key="Enter" Command="{Binding SearchPackagesCommand}"></KeyBinding>
-                    </TextBox.InputBindings>
-                </TextBox>
-            </ToolBar>
-        </ToolBarTray>
+        <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top" Background="Transparent">
+            <Button Content="Load all packages" Command="{Binding LoadAllPackagesCommand}" />
+            <Label Content="Search" HorizontalAlignment="Right" />
+            <TextBox Width="80" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchPackagesCommand}"></KeyBinding>
+                </TextBox.InputBindings>
+            </TextBox>
+        </ToolBar>
         <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
         <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
             <StatusBar.ItemsPanel>
