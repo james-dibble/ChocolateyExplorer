@@ -169,7 +169,8 @@
 
             this._sourcesManager.RemoveSource(source);
 
-            this.Sources.Remove(source);
+            this.Sources = new ObservableCollection<ChocolateySource>(this.Sources.Where(s => s.Name != source.Name));
+            this.RaisePropertyChanged(() => this.Sources);
         }
 
         private bool ValidateNewSource()
