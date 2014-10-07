@@ -5,6 +5,10 @@
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
+        <Style TargetType="{x:Type Button}" x:Key="ToolbarButton">
+            <Setter Property="Padding" Value="9"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Padding" Value="3"/>
             <Setter Property="Margin" Value="5"/>
@@ -16,6 +20,7 @@
         <Style TargetType="{x:Type Label}">
             <Setter Property="Padding" Value="3"/>
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <Style TargetType="{x:Type Label}" x:Key="Title">
             <Setter Property="FontWeight" Value="Bold"/>

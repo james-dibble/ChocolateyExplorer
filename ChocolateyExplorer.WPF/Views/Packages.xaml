@@ -16,9 +16,9 @@
     </UserControl.DataContext>
     <DockPanel LastChildFill="true">
         <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top" Background="Transparent">
-            <Button Content="Load all packages" Command="{Binding LoadAllPackagesCommand}" />
+            <Button Content="Load all packages" Command="{Binding LoadAllPackagesCommand}" Style="{DynamicResource ToolbarButton}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
             <Label Content="Search" HorizontalAlignment="Right" />
-            <TextBox Width="80" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox Width="110" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding SearchPackagesCommand}"></KeyBinding>
                 </TextBox.InputBindings>
