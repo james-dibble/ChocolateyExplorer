@@ -32,6 +32,7 @@
     <PublisherName>James Dibble</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
+    <DisallowUrlActivation>true</DisallowUrlActivation>
     <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
