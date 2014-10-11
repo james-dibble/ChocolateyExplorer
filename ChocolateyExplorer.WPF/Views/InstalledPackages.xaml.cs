@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ChocolateyExplorer.WPF.ViewModel;
 
 namespace ChocolateyExplorer.WPF.Views
 {
@@ -23,6 +24,13 @@ namespace ChocolateyExplorer.WPF.Views
         public InstalledPackages()
         {
             InitializeComponent();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var viewModel = this.DataContext as InstalledPackagesViewModel;
+
+            Task.Factory.StartNew(() => viewModel.RefreshPackages());
         }
     }
 }

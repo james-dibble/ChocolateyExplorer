@@ -10,13 +10,13 @@
     {
         private const string listLocalCommand = @"clist -lo";
 
-        public IEnumerable<ChocolateyPackageVersion> RetrieveInstalledPackages()
+        public async Task<IEnumerable<ChocolateyPackageVersion>> RetrieveInstalledPackages()
         {
             using (var powershell = PowerShell.Create())
             {
                 powershell.AddScript(listLocalCommand);
 
-                var result = powershell.Invoke();
+                var result = await Task.Factory.StartNew(() => powershell.Invoke());
 
                 var installedPackages = result.Select(r => r.ToString()).Select(ParseFromOutput);
 

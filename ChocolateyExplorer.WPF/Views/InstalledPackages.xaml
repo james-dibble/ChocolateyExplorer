@@ -5,8 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800"
-             DataContext="{Binding Source={StaticResource Locator}, Path=InstalledPackages}">
+             DataContext="{Binding Source={StaticResource Locator}, Path=InstalledPackages}" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
     <DockPanel LastChildFill="true">
+        <StatusBar HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel LastChildFill="false" />
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <Label Content="{Binding StatusMessage}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <ProgressBar IsIndeterminate="True" Height="20" Width="90" Visibility="{Binding IsLoadingPackages, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </StatusBarItem>
+            <StatusBarItem DockPanel.Dock="Right">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Number of Packages" />
+                    <Label Content="{Binding InstalledPackages.Count}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
         <ListView ItemsSource="{Binding InstalledPackages}">
             <ListView.View>
                 <GridView>

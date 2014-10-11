@@ -6,6 +6,6 @@
 
     public interface IInstalledPackagesManager
     {
-        IEnumerable<ChocolateyPackageVersion> RetrieveInstalledPackages();
+        Task<IEnumerable<ChocolateyPackageVersion>> RetrieveInstalledPackages();
     }
 }
