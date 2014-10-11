@@ -20,7 +20,7 @@
                 <Label Content="{Binding StatusMessage}" />
             </StatusBarItem>
             <StatusBarItem>
-                <ProgressBar IsIndeterminate="True" Height="20" Width="90" Visibility="{Binding IsLoadingPackages, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <ProgressBar IsIndeterminate="True" Height="20" Width="90" Visibility="{Binding IsWorking, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StatusBarItem>
             <StatusBarItem DockPanel.Dock="Right">
                 <StackPanel Orientation="Horizontal">
@@ -30,7 +30,7 @@
             </StatusBarItem>
         </StatusBar>
         <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
-        <ListView ItemsSource="{Binding InstalledPackages}">
+        <ListView ItemsSource="{Binding InstalledPackages}" IsEnabled="{Binding CanSelectPackage}">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Update"

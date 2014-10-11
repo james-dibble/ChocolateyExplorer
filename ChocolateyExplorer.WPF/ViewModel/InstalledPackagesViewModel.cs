@@ -14,7 +14,7 @@
         private readonly IChocolateyInstaller _installer;
         private readonly ConsoleViewModel _console;
 
-        private bool _isLoadingPackages;
+        private bool _isWorking;
         private string _statusMessage;
 
         public InstalledPackagesViewModel(
@@ -29,7 +29,7 @@
             this.UninstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UninstallPackage(p));
             this.UpdatePackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UpdatePackage(p));
 
-            this.IsLoadingPackages = false;
+            this.IsWorking = false;
             this.StatusMessage = "Ready";
 
             this.InstalledPackages = new ObservableCollection<ChocolateyPackageVersion>();
@@ -37,19 +37,26 @@
 
         public ObservableCollection<ChocolateyPackageVersion> InstalledPackages { get; private set; }
 
-        public bool IsLoadingPackages
+        public bool CanSelectPackage
         {
             get
             {
-                return this._isLoadingPackages;
+                return !this.IsWorking;
+            }
+        }
+
+        public bool IsWorking
+        {
+            get
+            {
+                return this._isWorking;
             }
             set
             {
-                this._isLoadingPackages = value;
-
-                this.StatusMessage = "Loading";
-
-                this.RaisePropertyChanged(() => this.IsLoadingPackages);
+                this._isWorking = value;
+                
+                this.RaisePropertyChanged(() => this.IsWorking);
+                this.RaisePropertyChanged(() => this.CanSelectPackage);
             }
         }
 
@@ -73,7 +80,8 @@
 
         public async Task RefreshPackages()
         {
-            this.IsLoadingPackages = true;
+            this.StatusMessage = "Loading Installed Packages";
+            this.IsWorking = true;
 
             var installedPackages = await this._packagesManager.RetrieveInstalledPackages();
 
@@ -84,7 +92,7 @@
                 this.InstalledPackages.Add(package);
             }
 
-            this.IsLoadingPackages = false;
+            this.IsWorking = false;
             this.StatusMessage = "Ready";
         }
 
