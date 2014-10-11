@@ -24,13 +24,8 @@ namespace ChocolateyExplorer.WPF.Views
         public InstalledPackages()
         {
             InitializeComponent();
-        }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            var viewModel = this.DataContext as InstalledPackagesViewModel;
-
-            Task.Factory.StartNew(() => viewModel.RefreshPackages());
+            this.Loaded += async (a, b) => await (this.DataContext as InstalledPackagesViewModel).RefreshPackages();
         }
     }
 }
