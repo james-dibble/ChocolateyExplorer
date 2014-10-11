@@ -21,11 +21,27 @@ namespace ChocolateyExplorer.WPF.Views
     /// </summary>
     public partial class InstalledPackages : UserControl
     {
+        private bool _havePackagesBeenLoaded;
+
         public InstalledPackages()
         {
+            this._havePackagesBeenLoaded = false;
+
             InitializeComponent();
 
-            this.Loaded += async (a, b) => await (this.DataContext as InstalledPackagesViewModel).RefreshPackages();
+            this.Loaded += async (a, b) => await this.LoadPackages();
+        }
+
+        private async Task LoadPackages()
+        {
+            if(this._havePackagesBeenLoaded)
+            {
+                return;
+            }
+
+            await (this.DataContext as InstalledPackagesViewModel).RefreshPackages();
+
+            this._havePackagesBeenLoaded = true;
         }
     }
 }

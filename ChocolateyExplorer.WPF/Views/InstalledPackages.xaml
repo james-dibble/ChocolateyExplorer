@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ChocolateyExplorer.WPF.Views.InstalledPackages"
+﻿<UserControl xmlns:ViewModel="clr-namespace:ChocolateyExplorer.WPF.ViewModel"  x:Class="ChocolateyExplorer.WPF.Views.InstalledPackages"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -29,7 +29,18 @@
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
+        <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
         <ListView ItemsSource="{Binding InstalledPackages}">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Update"
+                        Command="{Binding UpdatePackageCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                    <MenuItem Header="Uninstall"
+                        Command="{Binding UninstallPackageCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Package Id" DisplayMemberBinding="{Binding Id}" />

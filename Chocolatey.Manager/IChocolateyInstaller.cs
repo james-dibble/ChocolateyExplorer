@@ -8,5 +8,9 @@
     public interface IChocolateyInstaller
     {
         Task<IEnumerable<string>> Install(ChocolateyPackageVersion package);
+
+        Task<IEnumerable<string>> Uninstall(ChocolateyPackageVersion package);
+
+        Task<IEnumerable<string>> Update(ChocolateyPackageVersion package);
     }
 }
