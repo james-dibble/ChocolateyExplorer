@@ -83,6 +83,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Content\chocolatey.ico" />
     <Content Include="Content\Style\theme.css">
       <DependentUpon>theme.less</DependentUpon>
     </Content>
