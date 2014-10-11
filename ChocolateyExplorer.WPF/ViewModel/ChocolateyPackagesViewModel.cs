@@ -15,6 +15,7 @@
     public class ChocolateyPackagesViewModel : ViewModelBase
     {
         private readonly ChocolateySourcesViewModel _sourcesViewModel;
+        private readonly InstalledPackagesViewModel _installedPackagesViewModel;
         private readonly ConsoleViewModel _consoleViewModel;
         private readonly IChocolateyFeedFactory _feedFactory;
         private readonly IChocolateyInstaller _installer;
@@ -31,12 +32,14 @@
             IChocolateyFeedFactory feedFactory,
             ChocolateySourcesViewModel sourcesViewModel,
             ConsoleViewModel consoleViewModel,
-            IChocolateyInstaller installer)
+            IChocolateyInstaller installer,
+            InstalledPackagesViewModel installedPackagesViewModel)
         {
             this._sourcesViewModel = sourcesViewModel;
             this._feedFactory = feedFactory;
             this._consoleViewModel = consoleViewModel;
             this._installer = installer;
+            this._installedPackagesViewModel = installedPackagesViewModel;
 
             this._sourcesViewModel.SelectedSourceChanged += newSource => this.HandleSelectedSourceChanged(newSource);
 
@@ -175,6 +178,8 @@
             this.IsWorking = false;
             this.CanSelectPackage = true;
             this.StatusMessage = "Ready";
+
+            await this._installedPackagesViewModel.RefreshPackages();
         }
 
         private void HandleSelectedSourceChanged(ChocolateySource source)
