@@ -159,12 +159,11 @@
 
             try
             {
-                var output = await this._installer.Install(package);
+                this._installer.OutputReceived += OutputReceived;
 
-                foreach (var outputLine in output)
-                {
-                    this._consoleViewModel.AddConsoleLine(outputLine);
-                }
+                await this._installer.Install(package);
+
+                this._installer.OutputReceived -= OutputReceived;
             }
             catch (Exception ex)
             {
@@ -269,6 +268,11 @@
             this.Packages = new ObservableCollection<ChocolateyPackage>(packages);
 
             this.RaisePropertyChanged(() => this.Packages);
+        }
+                
+        private void OutputReceived(string obj)
+        {
+            this._consoleViewModel.AddConsoleLine(obj);
         }
     }
 }

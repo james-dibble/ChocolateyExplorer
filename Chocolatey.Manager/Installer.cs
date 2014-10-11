@@ -5,10 +5,13 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Chocolatey.DomainModel;
+    using System;
 
     public class Installer : IChocolateyInstaller
     {
-        public async Task<IEnumerable<string>> Install(ChocolateyPackageVersion package)
+        public event Action<string> OutputReceived;
+
+        public async Task Install(ChocolateyPackageVersion package)
         {
             using (var powershell = PowerShell.Create())
             {
@@ -19,14 +22,15 @@
 
                 powershell.AddScript(command);
 
-                var result = await Task.Factory.StartNew(() => powershell.Invoke());
+                var outputCollection = new PSDataCollection<PSObject>();
+                outputCollection.DataAdded += this.SendOutput;
 
-                return result.Select(r => r.ToString());
+                await Task.Factory.StartNew(() => powershell.Invoke(null, outputCollection, null));
             }
         }
 
 
-        public async Task<IEnumerable<string>> Uninstall(ChocolateyPackageVersion package)
+        public async Task Uninstall(ChocolateyPackageVersion package)
         {
             using (var powershell = PowerShell.Create())
             {
@@ -37,24 +41,63 @@
 
                 powershell.AddScript(command);
 
-                var result = await Task.Factory.StartNew(() => powershell.Invoke());
+                var outputCollection = new PSDataCollection<PSObject>();
+                outputCollection.DataAdded += this.SendOutput;
 
-                return result.Select(r => r.ToString());
+                await Task.Factory.StartNew(() => powershell.Invoke(null, outputCollection, null));
             }
         }
 
 
-        public async Task<IEnumerable<string>> Update(ChocolateyPackageVersion package)
+        public async Task Update(ChocolateyPackageVersion package)
         {
             using (var powershell = PowerShell.Create())
             {
                 var command = string.Format("cup {0}", package.Id);
 
                 powershell.AddScript(command);
+                powershell.Streams.Error.DataAdded += ErrorDataAdded;
+                powershell.Streams.Warning.DataAdded += WarningDataAdded;
 
-                var result = await Task.Factory.StartNew(() => powershell.Invoke());
+                var outputCollection = new PSDataCollection<PSObject>();
+                outputCollection.DataAdded += this.SendOutput;
+                
+                await Task.Factory.StartNew(() => powershell.Invoke(null, outputCollection, null));
+            }
+        }
 
-                return result.Select(r => r.ToString());
+        void WarningDataAdded(object sender, DataAddedEventArgs args)
+        {
+            var outputCollection = sender as PSDataCollection<PSObject>;
+
+            var output = outputCollection[args.Index].ToString();
+
+            this.RaiseOutputReceiced(output);
+        }
+
+        void ErrorDataAdded(object sender, DataAddedEventArgs args)
+        {
+            var outputCollection = sender as PSDataCollection<PSObject>;
+
+            var output = outputCollection[args.Index].ToString();
+
+            this.RaiseOutputReceiced(output);
+        }
+
+        private void SendOutput(object sender, DataAddedEventArgs args)
+        {
+            var outputCollection = sender as PSDataCollection<PSObject>;
+
+            var output = outputCollection[args.Index].ToString();
+
+            this.RaiseOutputReceiced(output);
+        }
+
+        private void RaiseOutputReceiced(string output)
+        {
+            if (this.OutputReceived != null)
+            {
+                this.OutputReceived(output);
             }
         }
     }

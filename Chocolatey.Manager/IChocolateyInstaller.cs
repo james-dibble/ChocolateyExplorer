@@ -1,5 +1,6 @@
 ﻿namespace Chocolatey.Manager
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -7,10 +8,12 @@
 
     public interface IChocolateyInstaller
     {
-        Task<IEnumerable<string>> Install(ChocolateyPackageVersion package);
+        event Action<string> OutputReceived;
 
-        Task<IEnumerable<string>> Uninstall(ChocolateyPackageVersion package);
+        Task Install(ChocolateyPackageVersion package);
 
-        Task<IEnumerable<string>> Update(ChocolateyPackageVersion package);
+        Task Uninstall(ChocolateyPackageVersion package);
+
+        Task Update(ChocolateyPackageVersion package);
     }
 }

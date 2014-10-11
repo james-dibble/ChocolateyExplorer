@@ -98,34 +98,41 @@
 
         private async Task UninstallPackage(ChocolateyPackageVersion package)
         {
+            this.IsWorking = true;
             this.StatusMessage = string.Format("Uninstalling {0}", package.Id);
 
-            var output = await this._installer.Uninstall(package);
+            this._installer.OutputReceived += this.OutputReceived;
 
-            foreach (var line in output)
-            {
-                this._console.AddConsoleLine(line);
-            }
+            await this._installer.Uninstall(package);
+
+            this._installer.OutputReceived -= this.OutputReceived;
 
             await this.RefreshPackages();
 
             this.StatusMessage = "Ready";
+            this.IsWorking = false;
         }
 
         private async Task UpdatePackage(ChocolateyPackageVersion package)
         {
+            this.IsWorking = true;
             this.StatusMessage = string.Format("Updating {0}", package.Id);
 
-            var output = await this._installer.Update(package);
-            
-            foreach (var line in output)
-            {
-                this._console.AddConsoleLine(line);
-            }
+            this._installer.OutputReceived += this.OutputReceived;
 
+            await this._installer.Update(package);
+
+            this._installer.OutputReceived -= this.OutputReceived;
+            
             await this.RefreshPackages();
 
             this.StatusMessage = "Ready";
+            this.IsWorking = false;
+        }
+
+        private void OutputReceived(string obj)
+        {
+            this._console.AddConsoleLine(obj);
         }
     }
 }
