@@ -33,6 +33,8 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
     <DisallowUrlActivation>true</DisallowUrlActivation>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -114,11 +116,15 @@
     <Compile Include="ViewModel\ChocolateyPackagesViewModel.cs" />
     <Compile Include="ViewModel\ChocolateySourcesViewModel.cs" />
     <Compile Include="ViewModel\ConsoleViewModel.cs" />
+    <Compile Include="ViewModel\InstalledPackagesViewModel.cs" />
     <Compile Include="Views\Console.xaml.cs">
       <DependentUpon>Console.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\InstalledPackages.xaml.cs">
+      <DependentUpon>InstalledPackages.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Packages.xaml.cs">
       <DependentUpon>Packages.xaml</DependentUpon>
     </Compile>
@@ -138,6 +144,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\Console.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InstalledPackages.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
