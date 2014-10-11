@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{29AED6
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChocolateyExplorer.Website", "ChocolateyExplorer.Website\ChocolateyExplorer.Website.csproj", "{0129743D-68DC-4FCC-B5B9-18B1F79DCFBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{D196E974-E905-432D-AC7B-006EA93773DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D196E974-E905-432D-AC7B-006EA93773DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D196E974-E905-432D-AC7B-006EA93773DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0129743D-68DC-4FCC-B5B9-18B1F79DCFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0129743D-68DC-4FCC-B5B9-18B1F79DCFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0129743D-68DC-4FCC-B5B9-18B1F79DCFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0129743D-68DC-4FCC-B5B9-18B1F79DCFBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
