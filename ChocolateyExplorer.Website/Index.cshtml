@@ -1,54 +1,96 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Chocolatey Explorer - A GUI to make Chocolatey more awesome</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/content/style/theme.min.css" rel="stylesheet" />
-    <link href="~/content/chocolatey.ico" rel="shortcut icon" type="image/x-icon" />
-</head>
-<body>
-    <div class="site-wrapper">
-        <div class="site-wrapper-inner">
-            <div class="cover-container">
-                <div class="masthead clearfix">
-                    <div class="inner">
-                        <h3 class="masthead-brand">Chocolatey Explorer</h3>
-                        <ul class="nav masthead-nav">
-                            @*<li><a href="#">Features</a></li>*@
-                        </ul>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Chocolatey Explorer - A GUI to make Chocolatey more awesome</title>
+        <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/paper/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/content/style/theme.min.css" rel="stylesheet" />
+        <link href="~/content/chocolatey.ico" rel="shortcut icon" type="image/x-icon" />
+    </head>
+    <body>
+        <div class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
+                    <div class="masthead clearfix">
+                        <div class="inner">
+                            <h3 class="masthead-brand">Chocolatey Explorer</h3>
+                            <ul class="nav masthead-nav">
+                                <li><a data-scroll-to="#features">Features</a></li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="inner cover">
-                    <h1 class="cover-heading">Chocolatey Explorer</h1>
-                    <p class="lead">
-                        Chocolatey Explorer is an application to make <a href="http://chocolatey.org" target="_blank">Chocolatey</a> that little bit more awesome
-                        by giving you control over it's basic functions without having to break out PowerShell.
-                    </p>
-                    <p class="lead">
-                        <a href="ChocolateyExplorer.application" class="btn btn-lg btn-default">Download Direct</a>
-                    </p>
-                    <p class="lead">
-                        Or download with <a href="http://chocolatey.org/packages/ChocolateyExplorer" target="_blank">Chocolatey</a>
-                        <pre>C:\ choco install ChocolateyExplorer</pre>
-                    </p>
-                    <p class="lead">
-                        <a href="https://github.com/james-dibble/ChocolateyExplorer" target="_blank">Fork Chocolatey Explorer on GitHub.</a>
-                    </p>
-                </div>
-                <div class="mastfoot">
-                    <div class="inner">
-                        <p>
-                            Cover template for <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>.
-                            Copyright &copy; @DateTime.Now.Year <a href="http://www.jdibble.co.uk" target="_blank">James Dibble</a>.
-                            All rights reserved
+                    <div class="inner cover">
+                        <h1 class="cover-heading">Chocolatey Explorer</h1>
+                        <p class="lead">
+                            Chocolatey Explorer is an application to make <a href="http://chocolatey.org" target="_blank">Chocolatey</a> that little bit more awesome
+                            by giving you control over it's basic functions without having to break out PowerShell.
                         </p>
+                        <p class="lead">
+                            <a href="ChocolateyExplorer.application" class="btn btn-lg btn-default">Download Direct</a>
+                        </p>
+                        <p class="lead">
+                            Or download with <a href="http://chocolatey.org/packages/ChocolateyExplorer" target="_blank">Chocolatey</a>
+                            <pre>C:\ choco install ChocolateyExplorer</pre>
+                        </p>
+                        <p class="lead">
+                            <a href="https://github.com/james-dibble/ChocolateyExplorer" target="_blank">Fork Chocolatey Explorer on GitHub.</a>
+                        </p>
+                    </div>
+                    <div class="row" id="features">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="page-header">
+                                <h2>Features</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">Install</div>
+                                <div class="panel-body">
+                                    Install your favorite packages with an exact version, even prerelease one.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">Update or Uninstall</div>
+                                <div class="panel-body">
+                                    View the packages you currently have installed and update or remove them.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">Sources</div>
+                                <div class="panel-body">
+                                    Add a custom Chocolatey source that is exposed via OData including Nuget based feeds.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">Search</div>
+                                <div class="panel-body">
+                                    Search for a particular package to install from a particular source or list all available packages.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mastfoot">
+                        <div class="inner">
+                            <p>
+                                Cover template for <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>.
+                                Copyright &copy; @DateTime.Now.Year <a href="http://www.jdibble.co.uk" target="_blank">James Dibble</a>.
+                                All rights reserved
+                                <a data-scroll-to="html">Back to Top</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
+        <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="//asset.jdibble.co.uk/script/jquery-scrollto.min.js"></script>
+    </body>
 </html>

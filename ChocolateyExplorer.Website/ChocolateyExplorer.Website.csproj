@@ -83,7 +83,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Content\chocolatey.ico" />
+    <Resource Include="Content\chocolatey.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Content\Style\theme.css">
       <DependentUpon>theme.less</DependentUpon>
     </Content>
