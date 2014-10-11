@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IChocolateyInstaller.cs" />
+    <Compile Include="IInstalledPackagesManager.cs" />
+    <Compile Include="InstalledPackages.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="ISourcesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,9 +10,8 @@
         <ListView ItemsSource="{Binding InstalledPackages}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Package Id" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Package Id" DisplayMemberBinding="{Binding Id}" />
                     <GridViewColumn Header="Version" DisplayMemberBinding="{Binding Version}" />
-                    <GridViewColumn />
                 </GridView>
             </ListView.View>
         </ListView>
