@@ -34,13 +34,20 @@
                     </Style>
                 </Style.Resources>
             </Style>
+            <Style TargetType="{x:Type StackPanel}" x:Key="StackedInformation">
+                <Setter Property="Orientation" Value="Vertical" />
+                <Style.Resources>
+                    <Style TargetType="{x:Type StackPanel}">
+                        <Setter Property="Orientation" Value="Horizontal" />
+                    </Style>
+                </Style.Resources>
+            </Style>
             <Style TargetType="{x:Type StackPanel}" x:Key="Form">
                 <Setter Property="Orientation" Value="Horizontal" />
                 <Setter Property="Margin" Value="0,0,0,4" />
                 <Style.Resources>
-                    <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
-                        <Setter Property="Width" Value="100" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Width" Value="100"/>
                         <Setter Property="FontWeight" Value="Bold"/>
                     </Style>
                     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">

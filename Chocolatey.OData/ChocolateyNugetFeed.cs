@@ -82,10 +82,14 @@
                                                             .OrderByDescending(pv => pv.Version)
                                                             .Select(pv => new ChocolateyPackageVersion
                                                             {
+                                                                Author = pv.Authors,
                                                                 Id = p.Id,
-                                                                Title = p.Title,
-                                                                Description = p.Description,
-                                                                Version = pv.Version
+                                                                Title = pv.Title,
+                                                                Description = pv.Description,
+                                                                Version = pv.Version,
+                                                                ReleaseNotes = pv.ReleaseNotes,
+                                                                DownloadCount = pv.DownloadCount,
+                                                                ProjectLink = string.IsNullOrEmpty(pv.ProjectUrl) ? null : new Uri(pv.ProjectUrl)
                                                             })
                                   });
 

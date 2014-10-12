@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,14 @@ namespace ChocolateyExplorer.WPF.Views
         public Packages()
         {
             InitializeComponent();
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            var hyperlink = sender as Hyperlink;
+
+            Process.Start(new ProcessStartInfo(hyperlink.NavigateUri.ToString()));
+            e.Handled = true;
         }
     }
 }
