@@ -9,6 +9,9 @@
         MinWidth="800" 
         MinHeight="600" 
         WindowState="Maximized">
+    <mui:ModernWindow.TitleLinks>
+        <mui:Link DisplayName="About" Source="/Views/About.xaml" />
+    </mui:ModernWindow.TitleLinks>
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="Packages" >
             <mui:LinkGroup.Links>
