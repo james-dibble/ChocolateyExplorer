@@ -27,12 +27,13 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://chocolatey-explorer.jdibble.co.uk/</InstallUrl>
+    <UpdateUrl>http://chocolatey-explorer.jdibble.co.uk/</UpdateUrl>
+    <SupportUrl>http://chocolatey-explorer.jdibble.co.uk/</SupportUrl>
     <ErrorReportUrl>http://chocolatey-explorer.jdibble.co.uk/</ErrorReportUrl>
     <ProductName>Chocolatey Explorer</ProductName>
     <PublisherName>James Dibble</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <DisallowUrlActivation>true</DisallowUrlActivation>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
