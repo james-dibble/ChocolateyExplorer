@@ -12,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using FirstFloor.ModernUI.Windows.Controls;
 
-namespace ChocolateyExplorer.WPF
+namespace ChocolateyExplorer.WPF.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for RemotePackages.xaml
     /// </summary>
-    public partial class MainWindow : ModernWindow
+    public partial class RemotePackages : Page
     {
-        public MainWindow()
+        public RemotePackages()
         {
             InitializeComponent();
         }

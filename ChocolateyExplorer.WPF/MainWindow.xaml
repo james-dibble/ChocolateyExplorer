@@ -1,21 +1,20 @@
-﻿<Window
+﻿<mui:ModernWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Views="clr-namespace:ChocolateyExplorer.WPF.Views" x:Class="ChocolateyExplorer.WPF.MainWindow"
-        Title="Chocolatey Explorer" MinWidth="800" MinHeight="600" WindowState="Maximized">
-    
-    <DockPanel LastChildFill="true">
-        <TabControl>
-            <TabItem Header="Remote Packages" UseLayoutRounding="False">
-                <DockPanel LastChildFill="true">
-                    <Views:Sources />
-                    <Views:Packages />
-                </DockPanel>
-            </TabItem>
-            <TabItem Header="Installed Packages">
-                <Views:InstalledPackages />
-            </TabItem>
-        </TabControl>
-    </DockPanel>
-    
-</Window>
+        xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        ContentSource="/Views/RemotePackages.xaml"
+        Title="Chocolatey Explorer" 
+        IsTitleVisible="true"
+        MinWidth="800" 
+        MinHeight="600" 
+        WindowState="Maximized">
+    <mui:ModernWindow.MenuLinkGroups>
+        <mui:LinkGroup DisplayName="Packages" >
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Sources" Source="/Views/RemotePackages.xaml" />
+                <mui:Link DisplayName="Installed Packages" Source="/Views/InstalledPackages.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+    </mui:ModernWindow.MenuLinkGroups>
+</mui:ModernWindow>

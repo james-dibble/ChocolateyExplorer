@@ -80,6 +80,9 @@
     <StartupObject>ChocolateyExplorer.WPF.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FirstFloor.ModernUI">
+      <HintPath>..\packages\ModernUI.WPF.1.0.6\lib\net45\FirstFloor.ModernUI.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight">
       <HintPath>..\packages\MvvmLightLibs.4.4.32.7\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -128,6 +131,9 @@
     <Compile Include="Views\Packages.xaml.cs">
       <DependentUpon>Packages.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\RemotePackages.xaml.cs">
+      <DependentUpon>RemotePackages.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Sources.xaml.cs">
       <DependentUpon>Sources.xaml</DependentUpon>
     </Compile>
@@ -152,6 +158,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Packages.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RemotePackages.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
