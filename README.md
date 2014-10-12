@@ -15,3 +15,6 @@ Changelog
     + Load all of the packages from a source
     + View package information
     + Install a Chocolatey package
+* 0.1.0.61
+    + Themed with Modern UI
+    + Pacakges can be updated and uninstalled
