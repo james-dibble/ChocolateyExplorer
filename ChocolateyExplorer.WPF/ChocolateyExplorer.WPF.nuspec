@@ -12,7 +12,9 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Chocolatey Explorer is an application to make Chocolatey that little bit more awesome by giving you control over it's basic functions without having to break out PowerShell.</description>
         <releaseNotes>0.1.0.59
-First full functioning version.  Still considered a beta, however.  Exception handling is wanting.</releaseNotes>
+First full functioning version.  Still considered a beta, however.  Exception handling is wanting.
+0.1.0.61
+Themed to Modern UI</releaseNotes>
         <copyright>Copyright (c) 2014 James Dibble. All rights reserved.</copyright>
         <dependencies>
             <dependency id="chocolatey" version="0.9.8.27" />
