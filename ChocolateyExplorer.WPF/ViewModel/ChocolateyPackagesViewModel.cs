@@ -88,6 +88,7 @@
                 this.RaisePropertyChanged(() => this.IsWorking);
                 this.LoadAllPackagesCommand.RaiseCanExecuteChanged();
                 this.SearchPackagesCommand.RaiseCanExecuteChanged();
+                this.RaisePropertyChanged(() => this.CanSearchPackages);
             }
         }
 
@@ -102,6 +103,14 @@
                 this._canSelectPackage = value;
 
                 this.RaisePropertyChanged(() => this.CanSelectPackage);
+            }
+        }
+
+        public bool CanSearchPackages
+        {
+            get
+            {
+                return this._feed != null && !this.IsWorking;
             }
         }
 
@@ -200,6 +209,7 @@
             
             this.LoadAllPackagesCommand.RaiseCanExecuteChanged();
             this.SearchPackagesCommand.RaiseCanExecuteChanged();
+            this.RaisePropertyChanged(() => this.CanSearchPackages);
         }
 
         private async Task SearchPackages()

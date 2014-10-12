@@ -9,28 +9,25 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
-    <DockPanel LastChildFill="true">
-        <Label Content="Chocolatey Sources" DockPanel.Dock="Top" Style="{DynamicResource Title}" />
-        <Grid HorizontalAlignment="Stretch" DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Label Content="Id" Grid.Column="0" Grid.Row="0" Style="{DynamicResource Title}" />
-            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding NewSourceId}" />
-            <Label Content="Location" Grid.Column="0" Grid.Row="1" Style="{DynamicResource Title}" />
-            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding NewSourceLocation}" />
-            <Label Content="Nuget Feed" Grid.Column="0" Grid.Row="2" Style="{DynamicResource Title}" />
-            <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding IsNewSourceNuget}" />
-        </Grid>
-        <Button Content="Add Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" Visibility="{Binding IsAddingSource, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        <Button Content="Update Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" Visibility="{Binding CanEditSource, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        <ListView ItemsSource="{Binding Sources}" SelectionMode="Single" SelectedItem="{Binding SelectedChocolateySource}">
+    <DockPanel LastChildFill="true" Margin="0,0,10,0">
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
+            <Label Content="Chocolatey Sources" DockPanel.Dock="Top" Style="{DynamicResource Title}" />
+            <StackPanel Style="{DynamicResource Form}">
+                <Label Content="Id" />
+                <TextBox Text="{Binding NewSourceId}" />
+            </StackPanel>
+            <StackPanel Style="{DynamicResource Form}">
+                <Label Content="Location" />
+                <TextBox Text="{Binding NewSourceLocation}" />
+            </StackPanel>
+            <StackPanel Style="{DynamicResource Form}">
+                <Label Content="Nuget Feed" />
+                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsNewSourceNuget}" />
+            </StackPanel>
+            <Button Content="Add Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" Visibility="{Binding IsAddingSource, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="100,16,0,0" HorizontalAlignment="Left" />
+            <Button Content="Update Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" Visibility="{Binding CanEditSource, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="100,16,0,0" HorizontalAlignment="Left" />
+        </StackPanel>
+        <ListView ItemsSource="{Binding Sources}" SelectionMode="Single" SelectedItem="{Binding SelectedChocolateySource}" Margin="0,10,0,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Name}" />

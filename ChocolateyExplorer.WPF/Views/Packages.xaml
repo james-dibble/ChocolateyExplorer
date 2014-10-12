@@ -7,7 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"  >
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
@@ -15,17 +16,17 @@
         <Binding Path="Packages" Source="{StaticResource Locator}"/>
     </UserControl.DataContext>
     <DockPanel LastChildFill="true">
-        <ToolBar ToolBarTray.IsLocked="True" DockPanel.Dock="Top" Background="Transparent">
-            <Button Content="Load all packages" Command="{Binding LoadAllPackagesCommand}" Style="{DynamicResource ToolbarButton}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
-            <Label Content="Search" HorizontalAlignment="Right" />
-            <TextBox Width="110" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <StatusBar DockPanel.Dock="Top">
+            <Button Content="Load all packages" Command="{Binding LoadAllPackagesCommand}"/>
+            <TextBox Width="110" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanSearchPackages}">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding SearchPackagesCommand}"></KeyBinding>
                 </TextBox.InputBindings>
             </TextBox>
-        </ToolBar>
+            <mui:ModernButton Content="SEARCH" IconData="{StaticResource MagnifyIconData}" Command="{Binding SearchPackagesCommand}" />
+        </StatusBar>
         <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
-        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch">
+        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Style="{DynamicResource ResourceKey=StatusBar}">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel LastChildFill="false" />
@@ -49,7 +50,7 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <TreeView ItemsSource="{Binding Packages}" Grid.Column="0" IsEnabled="{Binding CanSelectPackage}">
+            <TreeView ItemsSource="{Binding Packages}" Grid.Column="0" IsEnabled="{Binding CanSelectPackage}" Margin="0,0,10,0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectedItemChanged">
                         <cmd:EventToCommand Command="{Binding SetSelectedPackageCommand}" PassEventArgsToCommand="True" />
@@ -66,17 +67,19 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <StackPanel Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <Label Content="Id" Style="{DynamicResource Title}" />
-                <Label Content="{Binding SelectedPackage.Id}"/>
-                <Label Content="Title" Style="{DynamicResource Title}" />
-                <Label Content="{Binding SelectedPackage.Title}"/>
-                <Label Content="Version" Style="{DynamicResource Title}" />
-                <Label Content="{Binding SelectedPackage.Version}"/>
-                <Label Content="Description" Style="{DynamicResource Title}" />
-                <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
-                <Button Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" />
-            </StackPanel>
+            <ScrollViewer Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0,0,5,0">
+                <StackPanel >
+                    <Label Content="Id" Style="{DynamicResource Title}" />
+                    <Label Content="{Binding SelectedPackage.Id}"/>
+                    <Label Content="Title" Style="{DynamicResource Title}" />
+                    <Label Content="{Binding SelectedPackage.Title}"/>
+                    <Label Content="Version" Style="{DynamicResource Title}" />
+                    <Label Content="{Binding SelectedPackage.Version}"/>
+                    <Label Content="Description" Style="{DynamicResource Title}" />
+                    <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
+                    <Button Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" Margin="0,10,0,10" />
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </DockPanel>
 </UserControl>
