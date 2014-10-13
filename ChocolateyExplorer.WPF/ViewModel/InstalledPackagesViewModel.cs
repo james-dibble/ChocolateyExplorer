@@ -27,8 +27,8 @@
             this._installer = installer;
             this._console = console;
 
-            this.UninstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UninstallPackage(p), p => p != null);
-            this.UpdatePackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UpdatePackage(p), p => p != null);
+            this.UninstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UninstallPackage(p), p => p != null && !this.IsWorking);
+            this.UpdatePackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UpdatePackage(p), p => p != null && !this.IsWorking);
             this.RefreshInstalledPackagesCommand = new RelayCommand(async () => await this.RefreshPackages(), () => !this.IsWorking);
 
             this.IsWorking = false;
@@ -61,6 +61,8 @@
                 this.RaisePropertyChanged(() => this.IsWorking);
                 this.RaisePropertyChanged(() => this.CanSelectPackage);
                 this.RefreshInstalledPackagesCommand.RaiseCanExecuteChanged();
+                this.UpdatePackageCommand.RaiseCanExecuteChanged();
+                this.UninstallPackageCommand.RaiseCanExecuteChanged();
             }
         }
 
