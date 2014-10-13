@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              mc:Ignorable="d" 
              d:DesignHeight="300" Width="300"
              DataContext="{Binding Source={StaticResource Locator}, Path=Sources}">
@@ -11,7 +12,11 @@
     </UserControl.Resources>
     <DockPanel LastChildFill="true" Margin="0,0,10,0">
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
-            <Label Content="Chocolatey Sources" DockPanel.Dock="Top" Style="{DynamicResource Title}" />
+            <TextBlock Text="Chocolatey Sources" DockPanel.Dock="Top" Style="{StaticResource Heading2}" />
+            <StackPanel Style="{DynamicResource Form}">
+                <mui:ModernButton IconData="{DynamicResource AddIconData}" Command="{Binding AddNewSourceCommand}" />
+                <mui:ModernButton IconData="{DynamicResource MinusIconData}" Command="{Binding RemoveSourceCommand}" CommandParameter="{Binding SelectedChocolateySource}" />
+            </StackPanel>
             <StackPanel Style="{DynamicResource Form}">
                 <Label Content="Id" />
                 <TextBox Text="{Binding NewSourceId}" />

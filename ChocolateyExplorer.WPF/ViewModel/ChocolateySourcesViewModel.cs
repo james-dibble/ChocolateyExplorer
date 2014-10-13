@@ -30,7 +30,8 @@
 
             this.Sources = new ObservableCollection<ChocolateySource>(sources);
             this.AddSourceCommand = new RelayCommand(this.AddSource, this.ValidateNewSource);
-            this.RemoveSourceCommand = new RelayCommand<ChocolateySource>(this.RemoveSource);
+            this.RemoveSourceCommand = new RelayCommand<ChocolateySource>(this.RemoveSource, source => source != null);
+            this.AddNewSourceCommand = new RelayCommand(() => this.SelectedChocolateySource = null);
         }
 
         public event Action<ChocolateySource> SelectedSourceChanged;
@@ -40,6 +41,8 @@
         public ICommand AddSourceCommand { get; private set; }
 
         public ICommand RemoveSourceCommand { get; private set; }
+
+        public ICommand AddNewSourceCommand { get; private set; }
 
         public string NewSourceId
         {
@@ -127,6 +130,9 @@
                 }
                 else
                 {
+                    this.NewSourceId = null;
+                    this.NewSourceLocation = null;
+                    this.IsNewSourceNuget = false;
                     this.CanEditSource = false;
                 }
 
