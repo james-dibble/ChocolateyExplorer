@@ -16,6 +16,7 @@
 
         private bool _isWorking;
         private string _statusMessage;
+        private ChocolateyPackageVersion _selectedPackage;
 
         public InstalledPackagesViewModel(
             IInstalledPackagesManager packagesManager, 
@@ -26,12 +27,13 @@
             this._installer = installer;
             this._console = console;
 
-            this.UninstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UninstallPackage(p));
-            this.UpdatePackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UpdatePackage(p));
+            this.UninstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UninstallPackage(p), p => p != null);
+            this.UpdatePackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UpdatePackage(p), p => p != null);
             this.RefreshInstalledPackagesCommand = new RelayCommand(async () => await this.RefreshPackages(), () => !this.IsWorking);
 
             this.IsWorking = false;
             this.StatusMessage = "Ready";
+            this.SelectedPackage = null;
 
             this.InstalledPackages = new ObservableCollection<ChocolateyPackageVersion>();
         }
@@ -76,9 +78,25 @@
             }
         }
 
-        public ICommand UninstallPackageCommand { get; private set; }
+        public ChocolateyPackageVersion SelectedPackage
+        {
+            get
+            {
+                return this._selectedPackage;
+            }
+            set
+            {
+                this._selectedPackage = value;
 
-        public ICommand UpdatePackageCommand { get; private set; }
+                this.RaisePropertyChanged(() => this.SelectedPackage);
+                this.UninstallPackageCommand.RaiseCanExecuteChanged();
+                this.UpdatePackageCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public RelayCommand<ChocolateyPackageVersion> UninstallPackageCommand { get; private set; }
+
+        public RelayCommand<ChocolateyPackageVersion> UpdatePackageCommand { get; private set; }
 
         public RelayCommand RefreshInstalledPackagesCommand { get; private set; }
 

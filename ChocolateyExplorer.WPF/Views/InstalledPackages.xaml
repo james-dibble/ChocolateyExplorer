@@ -11,8 +11,10 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <DockPanel LastChildFill="true">
-        <StackPanel DockPanel.Dock="Top">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <mui:ModernButton IconData="{StaticResource RefreshIconData}" Command="{Binding RefreshInstalledPackagesCommand}"/>
+            <mui:ModernButton IconData="{StaticResource UpdateIconData}" Command="{Binding UpdatePackageCommand}" CommandParameter="{Binding SelectedPackage}" />
+            <mui:ModernButton IconData="{StaticResource RemoveIconData}" Command="{Binding UninstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" />
         </StackPanel>
         <StatusBar HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>
@@ -34,7 +36,7 @@
             </StatusBarItem>
         </StatusBar>
         <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
-        <ListView ItemsSource="{Binding InstalledPackages}" IsEnabled="{Binding CanSelectPackage}">
+        <ListView ItemsSource="{Binding InstalledPackages}" IsEnabled="{Binding CanSelectPackage}" SelectedItem="{Binding SelectedPackage, Mode=TwoWay}">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Update"
