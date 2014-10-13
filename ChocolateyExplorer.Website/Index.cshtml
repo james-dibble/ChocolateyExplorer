@@ -1,4 +1,15 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var manifestPath = Server.MapPath("~/ChocolateyExplorer.application");
+
+    var manifest = System.Xml.Linq.XDocument.Load(manifestPath);
+
+    System.Xml.Linq.XNamespace @namespace = "urn:schemas-microsoft-com:asm.v1";
+
+    var applicationIdentity = manifest.Descendants(@namespace + "assemblyIdentity");
+
+    var currentVersion = applicationIdentity.Single().Attribute("version").Value;
+}
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -28,7 +39,10 @@
                             by giving you control over it's basic functions without having to break out PowerShell.
                         </p>
                         <p class="lead">
-                            <a href="ChocolateyExplorer.application" class="btn btn-lg btn-default">Download Direct</a>
+                            <span class="label label-primary">Current Version</span> @currentVersion
+                        </p>
+                        <p class="lead">
+                            <a href="ChocolateyExplorer.exe" class="btn btn-lg btn-default">Download Direct</a>
                         </p>
                         <p class="lead">
                             Or download with <a href="http://chocolatey.org/packages/ChocolateyExplorer" target="_blank">Chocolatey</a>
