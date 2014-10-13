@@ -28,6 +28,7 @@
 
             this.UninstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UninstallPackage(p));
             this.UpdatePackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UpdatePackage(p));
+            this.RefreshInstalledPackagesCommand = new RelayCommand(async () => await this.RefreshPackages(), () => !this.IsWorking);
 
             this.IsWorking = false;
             this.StatusMessage = "Ready";
@@ -57,6 +58,7 @@
                 
                 this.RaisePropertyChanged(() => this.IsWorking);
                 this.RaisePropertyChanged(() => this.CanSelectPackage);
+                this.RefreshInstalledPackagesCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -77,6 +79,8 @@
         public ICommand UninstallPackageCommand { get; private set; }
 
         public ICommand UpdatePackageCommand { get; private set; }
+
+        public RelayCommand RefreshInstalledPackagesCommand { get; private set; }
 
         public async Task RefreshPackages()
         {

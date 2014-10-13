@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800"
              DataContext="{Binding Source={StaticResource Locator}, Path=InstalledPackages}">
@@ -10,6 +11,9 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <DockPanel LastChildFill="true">
+        <StackPanel DockPanel.Dock="Top">
+            <mui:ModernButton IconData="{StaticResource RefreshIconData}" Command="{Binding RefreshInstalledPackagesCommand}"/>
+        </StackPanel>
         <StatusBar HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
