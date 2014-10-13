@@ -7,6 +7,10 @@
     using System.Security.Principal;
     using System.Windows;
 
+    using ChocolateyExplorer.WPF.Views;
+
+    using FirstFloor.ModernUI.Windows.Controls;
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -14,7 +18,21 @@
     {
         public App()
         {
+            this.DispatcherUnhandledException += this.App_DispatcherUnhandledException;
             this.Startup += this.Application_Startup;
+        }
+
+        void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            var messageBox = new ModernDialog
+                             {
+                                 Title = "Woops",
+                                 Content = new ErrorDialog(e.Exception)
+                             };
+
+            messageBox.Show();
+
+            e.Handled = true;
         }
 
         private bool IsRunAsAdministrator()
@@ -41,7 +59,13 @@
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Sorry, this application must be run as Administrator.");
+                    var messageBox = new ModernDialog
+                    {
+                        Title = "Woops",
+                        Content = new ErrorDialog(new InvalidOperationException("Chocolatey Explorer must be run as an administrator."))
+                    };
+
+                    messageBox.Show();
                 }
 
                 this.Shutdown();
