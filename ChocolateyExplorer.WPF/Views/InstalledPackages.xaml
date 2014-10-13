@@ -11,10 +11,10 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <DockPanel LastChildFill="true">
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <mui:ModernButton IconData="{StaticResource RefreshIconData}" Command="{Binding RefreshInstalledPackagesCommand}"/>
-            <mui:ModernButton IconData="{StaticResource UpdateIconData}" Command="{Binding UpdatePackageCommand}" CommandParameter="{Binding SelectedPackage}" />
-            <mui:ModernButton IconData="{StaticResource RemoveIconData}" Command="{Binding UninstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" />
+        <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}">
+            <mui:ModernButton IconData="{StaticResource RefreshIconData}" Command="{Binding RefreshInstalledPackagesCommand}" ToolTip="Refresh Installed Packages" />
+            <mui:ModernButton IconData="{StaticResource UpdateIconData}" Command="{Binding UpdatePackageCommand}" CommandParameter="{Binding SelectedPackage}" ToolTip="Update Selected Package" />
+            <mui:ModernButton IconData="{StaticResource RemoveIconData}" Command="{Binding UninstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" ToolTip="Uninstall Selected Package" />
         </StackPanel>
         <StatusBar HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>

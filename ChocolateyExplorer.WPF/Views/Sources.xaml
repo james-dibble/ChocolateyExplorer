@@ -12,10 +12,9 @@
     </UserControl.Resources>
     <DockPanel LastChildFill="true" Margin="0,0,10,0">
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
-            <TextBlock Text="Chocolatey Sources" DockPanel.Dock="Top" Style="{StaticResource Heading2}" />
-            <StackPanel Style="{DynamicResource Form}">
-                <mui:ModernButton IconData="{DynamicResource AddIconData}" Command="{Binding AddNewSourceCommand}" />
-                <mui:ModernButton IconData="{DynamicResource MinusIconData}" Command="{Binding RemoveSourceCommand}" CommandParameter="{Binding SelectedChocolateySource}" />
+            <StackPanel Style="{StaticResource Toolbar}">
+                <mui:ModernButton IconData="{DynamicResource AddIconData}" Command="{Binding AddNewSourceCommand}" ToolTip="Add Source" />
+                <mui:ModernButton IconData="{DynamicResource MinusIconData}" Command="{Binding RemoveSourceCommand}" CommandParameter="{Binding SelectedChocolateySource}" ToolTip="Remove Source" />
             </StackPanel>
             <StackPanel Style="{DynamicResource Form}">
                 <Label Content="Id" />
