@@ -30,7 +30,7 @@
                                  Content = new ErrorDialog(e.Exception)
                              };
 
-            messageBox.Show();
+            messageBox.ShowDialog();
 
             e.Handled = true;
         }
