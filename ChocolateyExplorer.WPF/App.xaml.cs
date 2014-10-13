@@ -57,7 +57,7 @@
                 {
                     Process.Start(processInfo);
                 }
-                catch (Exception)
+                catch
                 {
                     var messageBox = new ModernDialog
                     {
@@ -65,7 +65,7 @@
                         Content = new ErrorDialog(new InvalidOperationException("Chocolatey Explorer must be run as an administrator."))
                     };
 
-                    messageBox.Show();
+                    messageBox.ShowDialog();
                 }
 
                 this.Shutdown();
