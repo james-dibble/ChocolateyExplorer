@@ -86,6 +86,9 @@
     <Resource Include="Content\chocolatey.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Content\ChocolateyExplorerInstalledPackagesView.PNG" />
+    <Content Include="Content\ChocolateyExplorerSourcesView.PNG" />
+    <Content Include="Content\ChocolateyExplorerUpdateUninstall.PNG" />
     <Content Include="Content\Style\theme.css">
       <DependentUpon>theme.less</DependentUpon>
     </Content>
