@@ -98,6 +98,8 @@
     <Content Include="googled89da873de4b424d.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="robots.txt" />
+    <Content Include="sitemap.xml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
