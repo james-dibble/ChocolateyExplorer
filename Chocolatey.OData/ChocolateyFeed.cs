@@ -18,7 +18,7 @@
             this._feedClient = feedClient;
             this.Source = source;
         }
-        
+
         public event Action<IEnumerable<ChocolateyPackage>> PageOfPackagesLoaded;
 
         public ChocolateySource Source { get; private set; }
@@ -26,102 +26,67 @@
         public async Task<IEnumerable<ChocolateyPackage>> GetAllPackages()
         {
             var query = this._feedClient.Packages;
-
-            var allPackages = new List<FeedPackage>();
             
             var response = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)query.Execute());
 
-            foreach (var package in response)
-            {
-                allPackages.Add(package);
-            }
+            var allPackages = response.Select(ConvertToPackage).ToList();
 
             var nextQuery = response.GetContinuation();
 
-            while (nextQuery != null)
-            {
-                var currentResponse = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)this._feedClient.Execute(nextQuery));
-
-                foreach (var package in currentResponse)
-                {
-                    allPackages.Add(package);
-                }
-
-                if(this.PageOfPackagesLoaded != null)
-                {
-                    this.PageOfPackagesLoaded(ConvertToPackages(allPackages));
-                }
-                
-                nextQuery = currentResponse.GetContinuation();
-            }
-
-            return ConvertToPackages(allPackages);
+            return (await this.RetrievePackagesInternal(nextQuery, allPackages)).GroupPackages();
         }
 
         public async Task<IEnumerable<ChocolateyPackage>> SearchPackages(string criteria)
         {
             var query = this._feedClient.Packages.AddQueryOption("$filter", "substringof('" + criteria + "',Id) eq true");
 
-            var allPackages = new List<FeedPackage>();
-
             var response = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)query.Execute());
 
-            foreach (var package in response)
-            {
-                allPackages.Add(package);
-            }
+            var allPackages = response.Select(ConvertToPackage).ToList();
 
             var nextQuery = response.GetContinuation();
 
-            while (nextQuery != null)
-            {
-                var currentResponse = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)this._feedClient.Execute(nextQuery));
-
-                foreach (var package in currentResponse)
-                {
-                    allPackages.Add(package);
-                }
-
-                if (this.PageOfPackagesLoaded != null)
-                {
-                    this.PageOfPackagesLoaded(ConvertToPackages(allPackages));
-                }
-
-                nextQuery = currentResponse.GetContinuation();
-            }
-
-            return ConvertToPackages(allPackages);
+            return (await this.RetrievePackagesInternal(nextQuery, allPackages)).GroupPackages();
         }
 
-        private static IEnumerable<ChocolateyPackage> ConvertToPackages(IEnumerable<FeedPackage> results)
+        private async Task<IEnumerable<ChocolateyPackageVersion>> RetrievePackagesInternal(DataServiceQueryContinuation<FeedPackage> query, IList<ChocolateyPackageVersion> currentPackages)
         {
-            var allPackages = results.ToList();
+            if (query == null)
+            {
+                return currentPackages;
+            }
 
-            var packages = results.OrderBy(p => p.Id)
-                                  .ThenByDescending(p => p.Version)
-                                  .DistinctBy(p => p.Id)
-                                  .AsParallel()
-                                  .Select(p => new ChocolateyPackage
-                                  {
-                                      Id = p.Id,
-                                      Title = p.Title,
-                                      Versions = allPackages.Where(pv => pv.Id == p.Id)
-                                                            .OrderByDescending(pv => pv.Version)
-                                                            .Select(pv => new ChocolateyPackageVersion 
-                                                            {
-                                                                Author = pv.Authors,
-                                                                ChocolateyLink = new Uri(pv.GalleryDetailsUrl),
-                                                                Id = p.Id,
-                                                                Title = pv.Title,
-                                                                Description = pv.Description,
-                                                                Version = pv.Version,
-                                                                ReleaseNotes = pv.ReleaseNotes,
-                                                                DownloadCount = pv.DownloadCount,
-                                                                ProjectLink = string.IsNullOrEmpty(pv.ProjectUrl) ? null : new Uri(pv.ProjectUrl)
-                                                            })
-                                  });
+            var currentResponse = await Task.Factory.StartNew(() => this._feedClient.Execute(query));
+            
+            foreach (var feedPackage in currentResponse)
+            {
+                currentPackages.Add(ConvertToPackage(feedPackage));
+            }
 
-            return packages;
+            var nextQuery = currentResponse.GetContinuation();
+
+            return await this.RetrievePackagesInternal(nextQuery, currentPackages);
+        }
+        
+        private static ChocolateyPackageVersion ConvertToPackage(FeedPackage package)
+        {
+            var convertedPackage = new ChocolateyPackageVersion
+            {
+                Author = package.Authors,
+                ChocolateyLink = new Uri(package.GalleryDetailsUrl),
+                Id = package.Id,
+                Title = package.Title,
+                Description = package.Description,
+                Version = package.Version,
+                ReleaseNotes = package.ReleaseNotes,
+                DownloadCount = package.DownloadCount,
+                ProjectLink =
+                    string.IsNullOrEmpty(package.ProjectUrl)
+                        ? null
+                        : new Uri(package.ProjectUrl)
+            };
+
+            return convertedPackage;
         }
     }
 }

@@ -61,6 +61,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IChocolateyFeed.cs" />
     <Compile Include="IChocolateyFeedFactory.cs" />
+    <Compile Include="PackageOrginiser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\Nuget\Reference.cs">
       <AutoGen>True</AutoGen>
