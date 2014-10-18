@@ -12,6 +12,8 @@
 
         Task Install(ChocolateyPackageVersion package);
 
+        Task Install(ChocolateyPackageVersion package, string arguments);
+
         Task Uninstall(ChocolateyPackageVersion package);
 
         Task Update(ChocolateyPackageVersion package);

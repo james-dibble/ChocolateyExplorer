@@ -31,6 +31,7 @@
         private bool _hasSearchResults;
         private CancellationTokenSource _activePackageTaskCancellation;
         private Task<IEnumerable<ChocolateyPackage>> _activePackageTask;
+        private string _installArguments;
 
         public ChocolateyPackagesViewModel(
             IChocolateyFeedFactory feedFactory,
@@ -129,6 +130,14 @@
             }
         }
 
+        public bool CanAddInstallArguments
+        {
+            get
+            {
+                return this.SelectedPackage != null && !this.IsWorking;
+            }
+        }
+
         public string StatusMessage
         {
             get
@@ -167,7 +176,10 @@
             {
                 this._selectedPackage = value;
 
+                this.InstallArguments = string.Empty;
+
                 this.RaisePropertyChanged(() => this.SelectedPackage);
+                this.RaisePropertyChanged(() => this.CanAddInstallArguments);
             }
         }
 
@@ -186,21 +198,53 @@
             }
         }
 
+        public string InstallArguments
+        {
+            get
+            {
+                return this._installArguments;
+            }
+            set
+            {
+                this._installArguments = value;
+
+                this.RaisePropertyChanged(() => this.InstallArguments);
+            }
+        }
+
         private async Task InstallPackage(ChocolateyPackageVersion package)
         {
             this.IsWorking = true;
             this.StatusMessage = "Installing";
-
-            this._consoleViewModel.AddConsoleLine(
+            
+            if (string.IsNullOrEmpty(this.InstallArguments))
+            {
+                this._consoleViewModel.AddConsoleLine(
                     "Installing package {0} from {1}",
                     package.Id,
                     this._feed.Source.Location);
+            }
+            else
+            {
+                this._consoleViewModel.AddConsoleLine(
+                    "Installing package {0} from {1} with arguments {2}",
+                    package.Id,
+                    this._feed.Source.Location,
+                    this.InstallArguments);
+            }
 
             try
             {
                 this._installer.OutputReceived += OutputReceived;
 
-                await this._installer.Install(package);
+                if(string.IsNullOrEmpty(this.InstallArguments))
+                {
+                    await this._installer.Install(package);
+                }
+                else
+                {
+                    await this._installer.Install(package, this.InstallArguments);
+                }
 
                 this._installer.OutputReceived -= OutputReceived;
             }

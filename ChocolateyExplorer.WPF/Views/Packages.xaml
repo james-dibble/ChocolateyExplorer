@@ -75,40 +75,46 @@
                 <Button Content="Load More" HorizontalAlignment="Right" Command="{Binding LoadMorePackagesCommand, Mode=OneWay}"  />
             </StatusBar>
             <ScrollViewer Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0,0,5,0" Grid.Row="0" Grid.RowSpan="2">
-                <StackPanel Style="{StaticResource StackedInformation}" Orientation="Vertical">
-                    <StackPanel>
-                        <Label Content="Id" Style="{DynamicResource Title}" />
-                        <Label Content="{Binding SelectedPackage.Id}"/>
+                <StackPanel>
+                    <StackPanel Style="{StaticResource StackedInformation}" Orientation="Vertical">
+                        <StackPanel>
+                            <Label Content="Id" Style="{DynamicResource Title}" />
+                            <Label Content="{Binding SelectedPackage.Id}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="Title" Style="{DynamicResource Title}" />
+                            <Label Content="{Binding SelectedPackage.Title}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="Version" Style="{DynamicResource Title}" />
+                            <Label Content="{Binding SelectedPackage.Version}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="Download Count" Style="{DynamicResource Title}" />
+                            <Label Content="{Binding SelectedPackage.DownloadCount}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="Author" Style="{DynamicResource Title}" />
+                            <Label Content="{Binding SelectedPackage.Author}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="Project Link" Style="{DynamicResource Title}" />
+                            <Label>
+                                <Hyperlink NavigateUri="{Binding SelectedPackage.ProjectLink}" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <Label Content="{Binding SelectedPackage.ProjectLink}" />
+                                </Hyperlink>
+                            </Label>
+                        </StackPanel>
+                        <Label Content="Description" Style="{DynamicResource Title}" />
+                        <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
+                        <Label Content="Release Notes" Style="{DynamicResource Title}" />
+                        <TextBlock Text="{Binding SelectedPackage.ReleaseNotes}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
+                        <Button Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" Margin="0,10,0,10" />
                     </StackPanel>
-                    <StackPanel>
-                        <Label Content="Title" Style="{DynamicResource Title}" />
-                        <Label Content="{Binding SelectedPackage.Title}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <Label Content="Version" Style="{DynamicResource Title}" />
-                        <Label Content="{Binding SelectedPackage.Version}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <Label Content="Download Count" Style="{DynamicResource Title}" />
-                        <Label Content="{Binding SelectedPackage.DownloadCount}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <Label Content="Author" Style="{DynamicResource Title}" />
-                        <Label Content="{Binding SelectedPackage.Author}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <Label Content="Project Link" Style="{DynamicResource Title}" />
-                        <Label>
-                            <Hyperlink NavigateUri="{Binding SelectedPackage.ProjectLink}" RequestNavigate="Hyperlink_RequestNavigate" >
-                                <Label Content="{Binding SelectedPackage.ProjectLink}" />
-                            </Hyperlink>
-                        </Label>
-                    </StackPanel>
-                    <Label Content="Description" Style="{DynamicResource Title}" />
-                    <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
-                    <Label Content="Release Notes" Style="{DynamicResource Title}" />
-                    <TextBlock Text="{Binding SelectedPackage.ReleaseNotes}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
-                    <Button Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" Margin="0,10,0,10" />
+                    <DockPanel Width="Auto" LastChildFill="True">
+                        <Label Content="Install Arguments" Style="{DynamicResource Title}" DockPanel.Dock="Left" />
+                        <TextBox Text="{Binding InstallArguments}" IsEnabled="{Binding CanAddInstallArguments, Mode=OneWay}" />
+                    </DockPanel>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

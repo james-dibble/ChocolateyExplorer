@@ -11,14 +11,17 @@
     {
         public event Action<string> OutputReceived;
 
-        public async Task Install(ChocolateyPackageVersion package)
+        public async Task Install(ChocolateyPackageVersion package, string arguments)
         {
+            var args = string.IsNullOrEmpty(arguments) ? string.Empty : " -installArguments " + arguments;
+
             using (var powershell = PowerShell.Create())
             {
                 var command = string.Format(
-                    "cinst {0} -version {1}",
+                    "cinst {0} -version {1}{2}",
                     package.Id,
-                    package.Version);
+                    package.Version,
+                    args);
 
                 powershell.AddScript(command);
 
@@ -27,6 +30,11 @@
 
                 await Task.Factory.StartNew(() => powershell.Invoke(null, outputCollection, null));
             }
+        }
+
+        public async Task Install(ChocolateyPackageVersion package)
+        {
+            await this.Install(package, string.Empty);
         }
 
 
