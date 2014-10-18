@@ -41,19 +41,24 @@
             this._installer = installer;
             this._installedPackagesViewModel = installedPackagesViewModel;
 
-            this._sourcesViewModel.SelectedSourceChanged += newSource => this.HandleSelectedSourceChanged(newSource);
+            this._sourcesViewModel.SelectedSourceChanged += async newSource => await this.HandleSelectedSourceChanged(newSource);
 
             this.Packages = new ObservableCollection<ChocolateyPackage>();
             this.InstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(
                 async package => await this.InstallPackage(package),
                 package => package != null);
-            this.SearchPackagesCommand = new RelayCommand(async () => await this.SearchPackages(), () => this._feed != null && !this.IsWorking);
+            this.SearchPackagesCommand = new RelayCommand(
+                async () => await this.SearchPackages(), 
+                () => this._feed != null && !this.IsWorking && !string.IsNullOrEmpty(this.SearchTerm) && this.SearchTerm.Length > 2);
             this.SetSelectedPackageCommand = new RelayCommand<RoutedPropertyChangedEventArgs<object>>(
                 package =>
                 {
                     this.SelectedPackage = package.NewValue as ChocolateyPackageVersion;
                 });
             this.LoadAllPackagesCommand = new RelayCommand(async () => await this.LoadPackages(), () => this._feed != null && !this.IsWorking);
+            this.LoadMorePackagesCommand = new RelayCommand(
+                async () => await this.LoadMorePackages(), 
+                () => this._feed != null && this._feed.IsAnotherPageAvailable && !this.IsWorking);
 
             this._isWorking = false;
             this._canSelectPackage = false;
@@ -69,6 +74,8 @@
         public ICommand SetSelectedPackageCommand { get; private set; }
 
         public RelayCommand LoadAllPackagesCommand { get; private set; }
+
+        public RelayCommand LoadMorePackagesCommand { get; private set; }
 
         public bool IsWorking
         {
@@ -86,7 +93,7 @@
                 }
 
                 this.RaisePropertyChanged(() => this.IsWorking);
-                this.LoadAllPackagesCommand.RaiseCanExecuteChanged();
+                this.LoadMorePackagesCommand.RaiseCanExecuteChanged();
                 this.SearchPackagesCommand.RaiseCanExecuteChanged();
                 this.RaisePropertyChanged(() => this.CanSearchPackages);
             }
@@ -190,24 +197,19 @@
             await this._installedPackagesViewModel.RefreshPackages();
         }
 
-        private void HandleSelectedSourceChanged(ChocolateySource source)
+        private async Task HandleSelectedSourceChanged(ChocolateySource source)
         {
             this.Packages.Clear();
             
-            if (this._feed != null)
-            {
-                this._feed.PageOfPackagesLoaded -= this.OnPageOfPackagesLoaded;
-            }
-
             this._feed = null;
 
             if (source != null)
             {
                 this._feed = this._feedFactory.Create(source);
-                this._feed.PageOfPackagesLoaded += this.OnPageOfPackagesLoaded;
+                await this.LoadPackages();
             }
             
-            this.LoadAllPackagesCommand.RaiseCanExecuteChanged();
+            this.LoadMorePackagesCommand.RaiseCanExecuteChanged();
             this.SearchPackagesCommand.RaiseCanExecuteChanged();
             this.RaisePropertyChanged(() => this.CanSearchPackages);
         }
@@ -225,6 +227,8 @@
 
             try
             {
+                this._feed.PageOfPackagesLoaded += this.OnPageOfPackagesLoaded;
+
                 var packages = await this._feed.SearchPackages(this.SearchTerm);
 
                 this.Packages = new ObservableCollection<ChocolateyPackage>(packages);
@@ -235,6 +239,10 @@
             {
                 this._consoleViewModel.AddConsoleLine("Failed to serach for packages from {0}", this._feed.Source.Location);
                 this._consoleViewModel.AddConsoleLine(ex.Message);
+            }
+            finally
+            {
+                this._feed.PageOfPackagesLoaded += this.OnPageOfPackagesLoaded;
             }
 
             this.RaisePropertyChanged(() => this.Packages);
@@ -254,7 +262,36 @@
 
             try
             {
-                var packages = await this._feed.GetAllPackages();
+                var packages = await this._feed.LoadFirstPage();
+
+                this.Packages = new ObservableCollection<ChocolateyPackage>(packages);
+
+                this._consoleViewModel.AddConsoleLine("Packages loaded.");
+            }
+            catch (Exception ex)
+            {
+                this._consoleViewModel.AddConsoleLine("Failed to load packages from {0}", this._feed.Source.Location);
+                this._consoleViewModel.AddConsoleLine(ex.Message);
+            }
+
+            this.RaisePropertyChanged(() => this.Packages);
+
+            this.IsWorking = false;
+            this.CanSelectPackage = true;
+            this.StatusMessage = "Ready";
+        }
+
+        private async Task LoadMorePackages()
+        {
+            this.IsWorking = true;
+            this.StatusMessage = "Loading";
+            this._consoleViewModel.AddConsoleLine("Loading packages from {0}", this._feed.Source.Location);
+
+            this.Packages.Clear();
+
+            try
+            {
+                var packages = await this._feed.GetNextPage();
 
                 this.Packages = new ObservableCollection<ChocolateyPackage>(packages);
 

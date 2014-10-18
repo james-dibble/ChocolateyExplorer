@@ -11,6 +11,12 @@
 
         ChocolateySource Source { get; }
 
+        bool IsAnotherPageAvailable { get; }
+
+        Task<IEnumerable<ChocolateyPackage>> LoadFirstPage();
+
+        Task<IEnumerable<ChocolateyPackage>> GetNextPage();
+
         Task<IEnumerable<ChocolateyPackage>> GetAllPackages();
 
         Task<IEnumerable<ChocolateyPackage>> SearchPackages(string criteria);

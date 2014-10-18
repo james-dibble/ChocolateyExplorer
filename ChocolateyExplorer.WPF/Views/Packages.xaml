@@ -17,8 +17,7 @@
     </UserControl.DataContext>
     <DockPanel LastChildFill="true">
         <StatusBar DockPanel.Dock="Top">
-            <Button Content="Load all packages" Command="{Binding LoadAllPackagesCommand}"/>
-            <TextBox Width="110" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanSearchPackages}">
+            <TextBox Width="200" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanSearchPackages}">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding SearchPackagesCommand}"></KeyBinding>
                 </TextBox.InputBindings>
@@ -26,7 +25,7 @@
             <mui:ModernButton Content="SEARCH" IconData="{StaticResource MagnifyIconData}" Command="{Binding SearchPackagesCommand}" />
         </StatusBar>
         <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
-        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Style="{DynamicResource ResourceKey=StatusBar}">
+        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Style="{DynamicResource ResourceKey=StatusBar}" Background="{x:Null}">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel LastChildFill="false" />
@@ -50,7 +49,11 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <TreeView ItemsSource="{Binding Packages}" Grid.Column="0" IsEnabled="{Binding CanSelectPackage}" Margin="0,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <TreeView ItemsSource="{Binding Packages}" Grid.Column="0" Grid.Row="0"  IsEnabled="{Binding CanSelectPackage}" Margin="0,0,10,0">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectedItemChanged">
                         <cmd:EventToCommand Command="{Binding SetSelectedPackageCommand}" PassEventArgsToCommand="True" />
@@ -67,7 +70,10 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <ScrollViewer Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0,0,5,0">
+            <StatusBar Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" >
+                <Button Content="Load More" HorizontalAlignment="Right" Command="{Binding LoadMorePackagesCommand, Mode=OneWay}"  />
+            </StatusBar>
+            <ScrollViewer Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0,0,5,0" Grid.Row="0" Grid.RowSpan="2">
                 <StackPanel Style="{StaticResource StackedInformation}" Orientation="Vertical">
                     <StackPanel>
                         <Label Content="Id" Style="{DynamicResource Title}" />
