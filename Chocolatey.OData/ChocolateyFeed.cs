@@ -85,9 +85,9 @@
 
         public async Task<IEnumerable<ChocolateyPackage>> SearchPackages(string criteria)
         {
-            var searchOptionTemplate = @"(substringof('{0}',Id) eq true) or (substringof('{0}',Title) eq true) or (substringof('{0}',Description) eq true)";
+            var searchOptionTemplate = @"(substringof('{0}',tolower(Id)) eq true) or (substringof('{0}',tolower(Title)) eq true) or (substringof('{0}',tolower(Description)) eq true)";
 
-            var query = this._feedClient.Packages.AddQueryOption("$filter", string.Format(searchOptionTemplate, criteria));
+            var query = this._feedClient.Packages.AddQueryOption("$filter", string.Format(searchOptionTemplate, criteria.ToLower()));
 
             var response = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)query.Execute());
 
