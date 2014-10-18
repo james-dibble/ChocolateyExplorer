@@ -8,6 +8,7 @@
     using Chocolatey.DomainModel;
     using Chocolatey.OData.Service;
     using System.Data.Services.Client;
+using System.Threading;
 
     public class ChocolateyFeed : IChocolateyFeed
     {
@@ -70,26 +71,18 @@
             return this._packageCache.GroupPackages();
         }
 
-        public async Task<IEnumerable<ChocolateyPackage>> GetAllPackages()
-        {
-            var query = this._feedClient.Packages;
-            
-            var response = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)query.Execute());
-
-            var allPackages = response.Select(ConvertToPackage).ToList();
-
-            var nextQuery = response.GetContinuation();
-
-            return (await this.RetrievePackagesInternal(nextQuery, allPackages)).GroupPackages();
-        }
-
-        public async Task<IEnumerable<ChocolateyPackage>> SearchPackages(string criteria)
+        public async Task<IEnumerable<ChocolateyPackage>> SearchPackages(string criteria, CancellationToken cancellationToken)
         {
             var searchOptionTemplate = @"(substringof('{0}',tolower(Id)) eq true) or (substringof('{0}',tolower(Title)) eq true) or (substringof('{0}',tolower(Description)) eq true)";
 
             var query = this._feedClient.Packages.AddQueryOption("$filter", string.Format(searchOptionTemplate, criteria.ToLower()));
 
-            var response = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)query.Execute());
+            var response = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)query.Execute(), cancellationToken);
+
+            if(cancellationToken.IsCancellationRequested)
+            {
+                return new List<ChocolateyPackage>();
+            }
 
             var allPackages = response.Select(ConvertToPackage).ToList();
             
@@ -97,12 +90,12 @@
 
             this.RaisePageOfPackagesLoaded(allPackages.GroupPackages());
 
-            return (await this.RetrievePackagesInternal(nextQuery, allPackages)).GroupPackages();
+            return (await this.RetrievePackagesInternal(nextQuery, allPackages, cancellationToken)).GroupPackages();
         }
 
-        private async Task<IEnumerable<ChocolateyPackageVersion>> RetrievePackagesInternal(DataServiceQueryContinuation<FeedPackage> query, IList<ChocolateyPackageVersion> currentPackages)
+        private async Task<IEnumerable<ChocolateyPackageVersion>> RetrievePackagesInternal(DataServiceQueryContinuation<FeedPackage> query, IList<ChocolateyPackageVersion> currentPackages, CancellationToken cancellationToken)
         {
-            if (query == null)
+            if (query == null || cancellationToken.IsCancellationRequested)
             {
                 return currentPackages;
             }
@@ -118,7 +111,7 @@
 
             this.RaisePageOfPackagesLoaded(currentPackages.GroupPackages());
 
-            return await this.RetrievePackagesInternal(nextQuery, currentPackages);
+            return await this.RetrievePackagesInternal(nextQuery, currentPackages, cancellationToken);
         }
 
         private void MergePackagesIntoCache(IEnumerable<ChocolateyPackageVersion> newPackages)

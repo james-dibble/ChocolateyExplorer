@@ -11,6 +11,7 @@
     using System.Windows;
     using GalaSoft.MvvmLight;
     using GalaSoft.MvvmLight.Command;
+    using System.Threading;
 
     public class ChocolateyPackagesViewModel : ViewModelBase
     {
@@ -28,6 +29,8 @@
         private string _searchTerm;
         private ChocolateyPackageVersion _selectedPackage;
         private bool _hasSearchResults;
+        private CancellationTokenSource _activePackageTaskCancellation;
+        private Task<IEnumerable<ChocolateyPackage>> _activePackageTask;
 
         public ChocolateyPackagesViewModel(
             IChocolateyFeedFactory feedFactory,
@@ -252,7 +255,11 @@
             {
                 this._feed.PageOfPackagesLoaded += this.OnPageOfPackagesLoaded;
 
-                var packages = await this._feed.SearchPackages(this.SearchTerm);
+                this._activePackageTaskCancellation = new CancellationTokenSource();
+
+                this._activePackageTask = this._feed.SearchPackages(this.SearchTerm, this._activePackageTaskCancellation.Token);
+
+                var packages = await this._activePackageTask;
 
                 this.Packages = new ObservableCollection<ChocolateyPackage>(packages);
 
@@ -265,7 +272,7 @@
             }
             finally
             {
-                this._feed.PageOfPackagesLoaded += this.OnPageOfPackagesLoaded;
+                this._feed.PageOfPackagesLoaded -= this.OnPageOfPackagesLoaded;
             }
 
             this.RaisePropertyChanged(() => this.Packages);
@@ -335,6 +342,21 @@
 
         private async Task ClearSearchResults()
         {
+            this._feed.PageOfPackagesLoaded -= this.OnPageOfPackagesLoaded;
+
+            if (this._activePackageTaskCancellation != null &&  this._activePackageTaskCancellation.IsCancellationRequested)
+            {
+                return;
+            }
+
+            if(this._activePackageTaskCancellation != null && !this._activePackageTaskCancellation.IsCancellationRequested)
+            {
+                this._activePackageTaskCancellation.Cancel();
+                await this._activePackageTask;
+            }
+
+            this._activePackageTaskCancellation = null;
+
             await this.LoadPackages();
 
             this.HasSearchResults = false;
@@ -343,6 +365,11 @@
 
         private void OnPageOfPackagesLoaded(IEnumerable<ChocolateyPackage> packages)
         {
+            if (this._activePackageTaskCancellation != null && this._activePackageTaskCancellation.IsCancellationRequested)
+            {
+                return;
+            }
+
             this.Packages = new ObservableCollection<ChocolateyPackage>(packages);
 
             this.RaisePropertyChanged(() => this.Packages);
