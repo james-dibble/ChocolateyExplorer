@@ -9,6 +9,9 @@ Chocolatey Explorer is distributed via ClickOnce.  Get your copy [here](http://c
 
 Changelog
 ---------
+* 0.1.0.94
+    + Improving searching functionality
+    + Bug fixes
 * 0.1.0.93
     + Minor performance improvements when loading packages from OData feeds
     + When exploring a feed, packages are loaded in pages.  No more load all as there
