@@ -220,6 +220,8 @@
         private async Task HandleSelectedSourceChanged(ChocolateySource source)
         {
             this.Packages.Clear();
+            this.HasSearchResults = false;
+            this.SearchTerm = string.Empty;
             
             this._feed = null;
 
