@@ -12,7 +12,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Chocolatey Explorer is an application to make Chocolatey that little bit more awesome by giving you control over it's basic functions without having to break out PowerShell.</description>
         <releaseNotes>
-          * 0.1.0.94
+          * 0.1.0.97
               + Improving searching functionality
               + Bug fixes
           * 0.1.0.93
