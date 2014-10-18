@@ -52,6 +52,11 @@
 
         public async Task<IEnumerable<ChocolateyPackage>> LoadFirstPage()
         {
+            if(this._packageCache.Any())
+            {
+                return this._packageCache.GroupPackages();
+            }
+
             var query = this._feedClient.Packages;
             
             var response = await Task.Factory.StartNew(() => (QueryOperationResponse<FeedPackage>)query.Execute());

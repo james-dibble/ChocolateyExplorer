@@ -27,6 +27,7 @@
         private string _statusMessage;
         private string _searchTerm;
         private ChocolateyPackageVersion _selectedPackage;
+        private bool _hasSearchResults;
 
         public ChocolateyPackagesViewModel(
             IChocolateyFeedFactory feedFactory,
@@ -58,11 +59,12 @@
             this.LoadAllPackagesCommand = new RelayCommand(async () => await this.LoadPackages(), () => this._feed != null && !this.IsWorking);
             this.LoadMorePackagesCommand = new RelayCommand(
                 async () => await this.LoadMorePackages(), 
-                () => this._feed != null && this._feed.IsAnotherPageAvailable && !this.IsWorking);
+                () => this._feed != null && this._feed.IsAnotherPageAvailable && !this.IsWorking && !this.HasSearchResults);
+            this.ClearSearchResultsCommand = new RelayCommand(async () => await this.ClearSearchResults());
 
-            this._isWorking = false;
-            this._canSelectPackage = false;
-            this._statusMessage = "Ready";
+            this.IsWorking = false;
+            this.CanSelectPackage = false;
+            this.StatusMessage = "Ready";
         }
 
         public ObservableCollection<ChocolateyPackage> Packages { get; private set; }
@@ -76,6 +78,8 @@
         public RelayCommand LoadAllPackagesCommand { get; private set; }
 
         public RelayCommand LoadMorePackagesCommand { get; private set; }
+
+        public ICommand ClearSearchResultsCommand { get; private set; }
 
         public bool IsWorking
         {
@@ -163,6 +167,21 @@
             }
         }
 
+        public bool HasSearchResults
+        {
+            get
+            {
+                return this._hasSearchResults;
+            }
+            set
+            {
+                this._hasSearchResults = value;
+
+                this.RaisePropertyChanged(() => this.HasSearchResults);
+                this.LoadMorePackagesCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         private async Task InstallPackage(ChocolateyPackageVersion package)
         {
             this.IsWorking = true;
@@ -224,6 +243,7 @@
                 this._feed.Source.Location);
 
             this.Packages.Clear();
+            this.HasSearchResults = true;
 
             try
             {
@@ -308,6 +328,14 @@
             this.IsWorking = false;
             this.CanSelectPackage = true;
             this.StatusMessage = "Ready";
+        }
+
+        private async Task ClearSearchResults()
+        {
+            await this.LoadPackages();
+
+            this.HasSearchResults = false;
+            this.SearchTerm = string.Empty;
         }
 
         private void OnPageOfPackagesLoaded(IEnumerable<ChocolateyPackage> packages)
