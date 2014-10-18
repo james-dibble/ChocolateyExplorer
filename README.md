@@ -9,6 +9,8 @@ Chocolatey Explorer is distributed via ClickOnce.  Get your copy [here](http://c
 
 Changelog
 ---------
+* 0.1.0.98
+    + Make searching a cancellable operation
 * 0.1.0.97
     + Improving searching functionality
     + Bug fixes
@@ -26,4 +28,3 @@ Changelog
     + Search a source
     + Load all of the packages from a source
     + View package information
-    + Install a Chocolatey package
