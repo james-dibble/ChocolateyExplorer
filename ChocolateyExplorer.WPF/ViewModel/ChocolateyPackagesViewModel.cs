@@ -47,7 +47,7 @@
             this.Packages = new ObservableCollection<ChocolateyPackage>();
             this.InstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(
                 async package => await this.InstallPackage(package),
-                package => package != null);
+                package => package != null && !this.IsWorking);
             this.SearchPackagesCommand = new RelayCommand(
                 async () => await this.SearchPackages(), 
                 () => this._feed != null && !this.IsWorking && !string.IsNullOrEmpty(this.SearchTerm) && this.SearchTerm.Length > 2);
@@ -69,7 +69,7 @@
 
         public ObservableCollection<ChocolateyPackage> Packages { get; private set; }
 
-        public ICommand InstallPackageCommand { get; private set; }
+        public RelayCommand<ChocolateyPackageVersion> InstallPackageCommand { get; private set; }
 
         public RelayCommand SearchPackagesCommand { get; private set; }
 
@@ -100,6 +100,7 @@
                 this.LoadMorePackagesCommand.RaiseCanExecuteChanged();
                 this.SearchPackagesCommand.RaiseCanExecuteChanged();
                 this.RaisePropertyChanged(() => this.CanSearchPackages);
+                this.InstallPackageCommand.RaiseCanExecuteChanged();
             }
         }
 

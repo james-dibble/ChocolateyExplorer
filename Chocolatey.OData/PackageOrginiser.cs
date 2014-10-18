@@ -21,7 +21,7 @@
                                   Id = chocolateyPackageVersion.Id,
                                   Title = chocolateyPackageVersion.Title,
                                   Versions =
-                                      allPackages.Where(pv => pv.Id == version.Id)
+                                      allPackages.Where(pv => pv.Id == version.Id).OrderByDescending(pv => pv.Version)
                               };
 
                 yield return package;
