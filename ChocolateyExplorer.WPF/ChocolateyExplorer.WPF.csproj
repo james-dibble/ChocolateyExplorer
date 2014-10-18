@@ -32,7 +32,6 @@
     <ErrorReportUrl>http://chocolatey-explorer.jdibble.co.uk/</ErrorReportUrl>
     <ProductName>Chocolatey Explorer</ProductName>
     <PublisherName>James Dibble</PublisherName>
-    <WebPage>index.html</WebPage>
     <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>

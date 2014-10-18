@@ -9,12 +9,18 @@ Chocolatey Explorer is distributed via ClickOnce.  Get your copy [here](http://c
 
 Changelog
 ---------
+* 0.1.0.93
+    + Minor performance improvements when loading packages from OData feeds
+    + When exploring a feed, packages are loaded in pages.  No more load all as there
+      are too many on Chocolatey.
+    + Search results can be cleared when completed.
+    + Bug fixes
+* 0.1.0.61
+    + Themed with Modern UI
+    + Pacakges can be updated and uninstalled
 * 0.1.0.4
     + Add custom source (must be the OData address but can be based upon a Nuget feed)
     + Search a source
     + Load all of the packages from a source
     + View package information
     + Install a Chocolatey package
-* 0.1.0.61
-    + Themed with Modern UI
-    + Pacakges can be updated and uninstalled
