@@ -62,7 +62,10 @@
                 </i:Interaction.Triggers>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Versions}">
-                        <TextBlock Text="{Binding Id}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold" Margin="0,0,5,0" />
+                            <TextBlock Text="{Binding Id}" />
+                        </StackPanel>
                         <HierarchicalDataTemplate.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Version}" />
