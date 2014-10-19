@@ -55,11 +55,7 @@
             this.SearchPackagesCommand = new RelayCommand(
                 async () => await this.SearchPackages(), 
                 () => this._feed != null && !this.IsWorking && !string.IsNullOrEmpty(this.SearchTerm) && this.SearchTerm.Length > 2);
-            this.SetSelectedPackageCommand = new RelayCommand<RoutedPropertyChangedEventArgs<object>>(
-                package =>
-                {
-                    this.SelectedPackage = package.NewValue as ChocolateyPackageVersion;
-                });
+            this.SetSelectedPackageCommand = new RelayCommand<RoutedPropertyChangedEventArgs<object>>(this.SetSelectedPackageVersion);
             this.LoadAllPackagesCommand = new RelayCommand(async () => await this.LoadPackages(), () => this._feed != null && !this.IsWorking);
             this.LoadMorePackagesCommand = new RelayCommand(
                 async () => await this.LoadMorePackages(), 
@@ -405,6 +401,29 @@
 
             this.HasSearchResults = false;
             this.SearchTerm = string.Empty;
+        }
+
+        private void SetSelectedPackageVersion(RoutedPropertyChangedEventArgs<object> packageChangedArguments)
+        {
+            var selectedPackage = packageChangedArguments.NewValue as ChocolateyPackage;
+
+            if(selectedPackage != null)
+            {
+                this.SelectedPackage = selectedPackage.LatestVersion;
+
+                return;
+            }
+
+            var selectedPackageVersion = packageChangedArguments.NewValue as ChocolateyPackageVersion;
+
+            if (selectedPackageVersion != null)
+            {
+                this.SelectedPackage = selectedPackageVersion;
+
+                return;
+            }
+
+            this.SelectedPackage = null;
         }
 
         private void OnPageOfPackagesLoaded(IEnumerable<ChocolateyPackage> packages)
