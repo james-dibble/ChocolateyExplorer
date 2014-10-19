@@ -74,7 +74,22 @@
             }
         }
 
-        void WarningDataAdded(object sender, DataAddedEventArgs args)
+        public async Task UpdateAll()
+        {
+            using (var powershell = PowerShell.Create())
+            {
+                powershell.AddScript("cup all");
+                powershell.Streams.Error.DataAdded += ErrorDataAdded;
+                powershell.Streams.Warning.DataAdded += WarningDataAdded;
+
+                var outputCollection = new PSDataCollection<PSObject>();
+                outputCollection.DataAdded += this.SendOutput;
+
+                await Task.Factory.StartNew(() => powershell.Invoke(null, outputCollection, null));
+            }
+        }
+
+        private void WarningDataAdded(object sender, DataAddedEventArgs args)
         {
             var outputCollection = sender as PSDataCollection<PSObject>;
 
@@ -83,7 +98,7 @@
             this.RaiseOutputReceiced(output);
         }
 
-        void ErrorDataAdded(object sender, DataAddedEventArgs args)
+        private void ErrorDataAdded(object sender, DataAddedEventArgs args)
         {
             var outputCollection = sender as PSDataCollection<PSObject>;
 

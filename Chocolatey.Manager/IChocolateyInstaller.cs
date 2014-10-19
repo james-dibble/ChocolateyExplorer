@@ -17,5 +17,7 @@
         Task Uninstall(ChocolateyPackageVersion package);
 
         Task Update(ChocolateyPackageVersion package);
+
+        Task UpdateAll();
     }
 }

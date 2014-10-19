@@ -30,6 +30,7 @@
             this.UninstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UninstallPackage(p), p => p != null && !this.IsWorking);
             this.UpdatePackageCommand = new RelayCommand<ChocolateyPackageVersion>(async p => await this.UpdatePackage(p), p => p != null && !this.IsWorking);
             this.RefreshInstalledPackagesCommand = new RelayCommand(async () => await this.RefreshPackages(), () => !this.IsWorking);
+            this.UpdateAllCommand = new RelayCommand(async () => await this.UpdateAllPackages(), () => !this.IsWorking);
 
             this.IsWorking = false;
             this.StatusMessage = "Ready";
@@ -102,6 +103,8 @@
 
         public RelayCommand RefreshInstalledPackagesCommand { get; private set; }
 
+        public RelayCommand UpdateAllCommand { get; private set; }
+
         public async Task RefreshPackages()
         {
             this.StatusMessage = "Loading Installed Packages";
@@ -148,6 +151,23 @@
 
             this._installer.OutputReceived -= this.OutputReceived;
             
+            await this.RefreshPackages();
+
+            this.StatusMessage = "Ready";
+            this.IsWorking = false;
+        }
+
+        private async Task UpdateAllPackages()
+        {
+            this.IsWorking = true;
+            this.StatusMessage = "Updating All Packages.  This may take some time...";
+
+            this._installer.OutputReceived += this.OutputReceived;
+
+            await this._installer.UpdateAll();
+
+            this._installer.OutputReceived -= this.OutputReceived;
+
             await this.RefreshPackages();
 
             this.StatusMessage = "Ready";

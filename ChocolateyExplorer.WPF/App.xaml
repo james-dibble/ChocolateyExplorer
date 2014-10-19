@@ -83,6 +83,9 @@
             <PathGeometry x:Key="RemoveIconData">
                 F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z
             </PathGeometry>
+            <PathGeometry x:Key="UpdateAllIconData">
+                F1 M 39,46L 46,46L 46,39L 51,39L 51,46L 58,46L 58,51L 51,51L 51,58L 46,58L 46,51L 39,51L 39,46 Z M 31,25L 38,25L 38,18L 43,18L 43,25L 50,25L 50,30L 43,30L 43,37L 38,37L 38,30L 31,30L 31,25 Z M 18,39L 25,39L 25,32L 30,32L 30,39L 37,39L 37,44L 30,44L 30,51L 25,51L 25,44L 18,44L 18,39 Z
+            </PathGeometry>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

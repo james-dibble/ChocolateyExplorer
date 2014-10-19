@@ -15,6 +15,7 @@
             <mui:ModernButton IconData="{StaticResource RefreshIconData}" Command="{Binding RefreshInstalledPackagesCommand}" ToolTip="Refresh Installed Packages" />
             <mui:ModernButton IconData="{StaticResource UpdateIconData}" Command="{Binding UpdatePackageCommand}" CommandParameter="{Binding SelectedPackage}" ToolTip="Update Selected Package" />
             <mui:ModernButton IconData="{StaticResource RemoveIconData}" Command="{Binding UninstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" ToolTip="Uninstall Selected Package" />
+            <mui:ModernButton IconData="{StaticResource UpdateAllIconData}" Command="{Binding UpdateAllCommand}" CommandParameter="{Binding SelectedPackage}" ToolTip="Update All Packages" />
         </StackPanel>
         <StatusBar HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>
