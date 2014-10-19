@@ -12,28 +12,37 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Chocolatey Explorer is an application to make Chocolatey that little bit more awesome by giving you control over it's basic functions without having to break out PowerShell.</description>
         <releaseNotes>
-* 0.1.0.99
-    + Install package with arguments
-* 0.1.0.98
-    + Make searching a cancellable operation
-* 0.1.0.97
-    + Improving searching functionality
-    + Bug fixes
-* 0.1.0.93
-    + Minor performance improvements when loading packages from OData feeds
-    + When exploring a feed, packages are loaded in pages.  No more load all as there
-      are too many on Chocolatey.
-    + Search results can be cleared when completed.
-    + Bug fixes
-* 0.1.0.61
-    + Themed with Modern UI
-    + Pacakges can be updated and uninstalled
-* 0.1.0.4
-    + Add custom source (must be the OData address but can be based upon a Nuget feed)
-    + Search a source
-    + Load all of the packages from a source
-    + View package information
-    + Install a Chocolatey package
+### 0.2.1.100
++ First complete release
++ Default to latest package when selecting one from the tree view
++ Ability to clear the console output
+
+### 0.1.0.99
++ Install package with arguments
+
+### 0.1.0.98
++ Make searching a cancellable operation
+
+### 0.1.0.97
++ Improving searching functionality
++ Bug fixes
+
+### 0.1.0.93
++ Minor performance improvements when loading packages from OData feeds
++ When exploring a feed, packages are loaded in pages.  No more load all as there
+  are too many on Chocolatey.
++ Search results can be cleared when completed.
++ Bug fixes
+
+### 0.1.0.61
++ Themed with Modern UI
++ Pacakges can be updated and uninstalled
+
+### 0.1.0.4
++ Add custom source (must be the OData address but can be based upon a Nuget feed)
++ Search a source
++ Load all of the packages from a source
++ View package information
         </releaseNotes>
         <copyright>Copyright (c) 2014 James Dibble. All rights reserved.</copyright>
         <dependencies>
