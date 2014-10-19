@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Windows.Input;
     using GalaSoft.MvvmLight;
+    using GalaSoft.MvvmLight.Command;
 
     public class ConsoleViewModel : ViewModelBase
     {
@@ -15,13 +17,17 @@
             this._consoleLines = new List<string>();
 
             this._consoleOutput = string.Empty;
+
+            this.ClearConsoleCommand = new RelayCommand(this.ClearConsole);
         }
+
+        public ICommand ClearConsoleCommand { get; private set; }
 
         public string ConsoleOutput
         {
             get
             {
-                if(!this._consoleLines.Any())
+                if (!this._consoleLines.Any())
                 {
                     return string.Empty;
                 }
@@ -33,6 +39,13 @@
         public void AddConsoleLine(string newLine, params object[] arguments)
         {
             this._consoleLines.Add(string.Format(newLine, arguments));
+
+            this.RaisePropertyChanged(() => this.ConsoleOutput);
+        }
+
+        private void ClearConsole()
+        {
+            this._consoleLines.Clear();
 
             this.RaisePropertyChanged(() => this.ConsoleOutput);
         }

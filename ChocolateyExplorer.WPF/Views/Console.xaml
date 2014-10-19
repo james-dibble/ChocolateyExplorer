@@ -14,5 +14,11 @@
         Text="{Binding ConsoleOutput, Mode=OneWay}" 
         IsReadOnly="True"
         ScrollViewer.HorizontalScrollBarVisibility="Auto"
-        ScrollViewer.VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged"  />
+        ScrollViewer.VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged"  >
+        <TextBox.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Clear" Command="{Binding ClearConsoleCommand}" />
+            </ContextMenu>
+        </TextBox.ContextMenu>
+    </TextBox>
 </UserControl>
