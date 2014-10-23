@@ -39,6 +39,7 @@ namespace ChocolateyExplorer.WPF.ViewModel
             SimpleIoc.Default.Register<InstalledPackagesViewModel>();
             SimpleIoc.Default.Register<ConsoleViewModel>();
             SimpleIoc.Default.Register<AboutViewModel>();
+            SimpleIoc.Default.Register<InstallListViewModel>();
 
             SimpleIoc.Default.Register<IChocolateyFeedFactory, ChocolateyFeedFactory>();
             SimpleIoc.Default.Register<ISourcesManager, Sources>();
@@ -91,6 +92,14 @@ namespace ChocolateyExplorer.WPF.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<AboutViewModel>();
+            }
+        }
+
+        public InstallListViewModel InstallList
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<InstallListViewModel>();
             }
         }
         

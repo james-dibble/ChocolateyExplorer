@@ -110,6 +110,7 @@
                         <Label Content="Release Notes" Style="{DynamicResource Title}" />
                         <TextBlock Text="{Binding SelectedPackage.ReleaseNotes}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
                         <Button Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" Margin="0,10,0,10" />
+                        <Button Content="Add to Install List" Command="{Binding AddToInstallListCommand}" CommandParameter="{Binding SelectedPackage}" Margin="0,10,0,10" />
                     </StackPanel>
                     <DockPanel Width="Auto" LastChildFill="True">
                         <Label Content="Install Arguments" Style="{DynamicResource Title}" DockPanel.Dock="Left" />

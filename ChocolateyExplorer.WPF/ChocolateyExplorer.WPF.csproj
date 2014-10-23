@@ -124,6 +124,7 @@
     <Compile Include="ViewModel\ChocolateySourcesViewModel.cs" />
     <Compile Include="ViewModel\ConsoleViewModel.cs" />
     <Compile Include="ViewModel\InstalledPackagesViewModel.cs" />
+    <Compile Include="ViewModel\InstallListViewModel.cs" />
     <Compile Include="Views\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -137,6 +138,9 @@
     </Compile>
     <Compile Include="Views\InstalledPackages.xaml.cs">
       <DependentUpon>InstalledPackages.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstallList.xaml.cs">
+      <DependentUpon>InstallList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Packages.xaml.cs">
       <DependentUpon>Packages.xaml</DependentUpon>
@@ -172,6 +176,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InstalledPackages.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InstallList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
