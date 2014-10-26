@@ -25,8 +25,7 @@
             <mui:ModernButton Content="SEARCH" IconData="{StaticResource MagnifyIconData}" Command="{Binding SearchPackagesCommand}" />
             <mui:ModernButton Content="Clear Search Results" IconData="{StaticResource RemoveIconData}" Command="{Binding ClearSearchResultsCommand}" Visibility="{Binding HasSearchResults, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StatusBar>
-        <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
-        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Style="{DynamicResource ResourceKey=StatusBar}" Background="{x:Null}">
+        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Background="{x:Null}">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel LastChildFill="false" />
@@ -45,6 +44,7 @@
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
+        <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
