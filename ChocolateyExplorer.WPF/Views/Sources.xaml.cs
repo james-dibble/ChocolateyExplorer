@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ChocolateyExplorer.WPF.ViewModel;
 
 namespace ChocolateyExplorer.WPF.Views
 {
@@ -20,9 +21,29 @@ namespace ChocolateyExplorer.WPF.Views
     /// </summary>
     public partial class Sources : UserControl
     {
+        private bool _sourcesLoaded;
+
         public Sources()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+
+            this._sourcesLoaded = false;
+
+            this.Loaded += Sources_Loaded;
+        }
+
+        void Sources_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(this._sourcesLoaded)
+            {
+                return;
+            }
+
+            var context = this.DataContext as ChocolateySourcesViewModel;
+
+            context.PopulateSources();
+
+            this._sourcesLoaded = true;
         }
     }
 }
