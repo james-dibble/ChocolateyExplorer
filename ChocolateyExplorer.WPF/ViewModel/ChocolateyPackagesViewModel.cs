@@ -17,6 +17,7 @@
     {
         private readonly ChocolateySourcesViewModel _sourcesViewModel;
         private readonly InstalledPackagesViewModel _installedPackagesViewModel;
+        private readonly InstallListViewModel _installListViewModel;
         private readonly ConsoleViewModel _consoleViewModel;
         private readonly IChocolateyFeedFactory _feedFactory;
         private readonly IChocolateyInstaller _installer;
@@ -38,35 +39,25 @@
             ChocolateySourcesViewModel sourcesViewModel,
             ConsoleViewModel consoleViewModel,
             IChocolateyInstaller installer,
-            InstalledPackagesViewModel installedPackagesViewModel)
+            InstalledPackagesViewModel installedPackagesViewModel,
+            InstallListViewModel installListView)
         {
             this._sourcesViewModel = sourcesViewModel;
             this._feedFactory = feedFactory;
             this._consoleViewModel = consoleViewModel;
             this._installer = installer;
             this._installedPackagesViewModel = installedPackagesViewModel;
+            this._installListViewModel = installListView;
 
             this._sourcesViewModel.SelectedSourceChanged += async newSource => await this.HandleSelectedSourceChanged(newSource);
 
-            this.Packages = new ObservableCollection<ChocolateyPackage>();
-            this.InstallPackageCommand = new RelayCommand<ChocolateyPackageVersion>(
-                async package => await this.InstallPackage(package),
-                package => package != null && !this.IsWorking);
-            this.SearchPackagesCommand = new RelayCommand(
-                async () => await this.SearchPackages(), 
-                () => this._feed != null && !this.IsWorking && !string.IsNullOrEmpty(this.SearchTerm) && this.SearchTerm.Length > 2);
-            this.SetSelectedPackageCommand = new RelayCommand<RoutedPropertyChangedEventArgs<object>>(this.SetSelectedPackageVersion);
-            this.LoadAllPackagesCommand = new RelayCommand(async () => await this.LoadPackages(), () => this._feed != null && !this.IsWorking);
-            this.LoadMorePackagesCommand = new RelayCommand(
-                async () => await this.LoadMorePackages(), 
-                () => this._feed != null && this._feed.IsAnotherPageAvailable && !this.IsWorking && !this.HasSearchResults);
-            this.ClearSearchResultsCommand = new RelayCommand(async () => await this.ClearSearchResults());
+            this.RegisterCommands();
 
             this.IsWorking = false;
             this.CanSelectPackage = false;
             this.StatusMessage = "Ready";
         }
-
+        
         public ObservableCollection<ChocolateyPackage> Packages { get; private set; }
 
         public RelayCommand<ChocolateyPackageVersion> InstallPackageCommand { get; private set; }
@@ -80,6 +71,8 @@
         public RelayCommand LoadMorePackagesCommand { get; private set; }
 
         public ICommand ClearSearchResultsCommand { get; private set; }
+
+        public RelayCommand<ChocolateyPackageVersion> AddToInstallListCommand { get; private set; }
 
         public bool IsWorking
         {
@@ -441,6 +434,32 @@
         private void OutputReceived(string obj)
         {
             this._consoleViewModel.AddConsoleLine(obj);
+        }
+
+        private void RegisterCommands()
+        {
+            this.Packages = new ObservableCollection<ChocolateyPackage>();
+            this.InstallPackageCommand =
+                new RelayCommand<ChocolateyPackageVersion>(
+                    async package => await this.InstallPackage(package),
+                    package => package != null && !this.IsWorking);
+            this.SearchPackagesCommand = new RelayCommand(
+                async () => await this.SearchPackages(),
+                () =>
+                    this._feed != null && !this.IsWorking && !string.IsNullOrEmpty(this.SearchTerm)
+                    && this.SearchTerm.Length > 2);
+            this.SetSelectedPackageCommand =
+                new RelayCommand<RoutedPropertyChangedEventArgs<object>>(this.SetSelectedPackageVersion);
+            this.LoadAllPackagesCommand = new RelayCommand(
+                async () => await this.LoadPackages(),
+                () => this._feed != null && !this.IsWorking);
+            this.LoadMorePackagesCommand = new RelayCommand(
+                async () => await this.LoadMorePackages(),
+                () => this._feed != null && this._feed.IsAnotherPageAvailable && !this.IsWorking && !this.HasSearchResults);
+            this.ClearSearchResultsCommand = new RelayCommand(async () => await this.ClearSearchResults());
+            this.AddToInstallListCommand =
+                new RelayCommand<ChocolateyPackageVersion>(
+                    package => this._installListViewModel.AddPackageToInstallList(package));
         }
     }
 }

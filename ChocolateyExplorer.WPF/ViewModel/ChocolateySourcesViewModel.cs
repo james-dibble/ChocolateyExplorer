@@ -25,10 +25,8 @@
         {
             this._sourcesManager = sourcesManager;
             this._feedFactory = feedFactory;
-
-            var sources = this._sourcesManager.GetSources();
-
-            this.Sources = new ObservableCollection<ChocolateySource>(sources);
+                        
+            this.Sources = new ObservableCollection<ChocolateySource>();
             this.AddSourceCommand = new RelayCommand(this.AddSource, this.ValidateNewSource);
             this.RemoveSourceCommand = new RelayCommand<ChocolateySource>(this.RemoveSource, source => source != null);
             this.AddNewSourceCommand = new RelayCommand(() => this.SelectedChocolateySource = null);
@@ -140,6 +138,20 @@
                 {
                     this.SelectedSourceChanged(value);
                 }
+            }
+        }
+
+        public void PopulateSources()
+        {
+            var sources = this._sourcesManager.GetSources();
+
+            this.Sources = new ObservableCollection<ChocolateySource>(sources);
+
+            this.RaisePropertyChanged(() => this.Sources);
+
+            if(this.Sources.Any())
+            {
+                this.SelectedChocolateySource = this.Sources.First();
             }
         }
 

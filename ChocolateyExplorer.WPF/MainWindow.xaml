@@ -17,6 +17,7 @@
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Sources" Source="/Views/RemotePackages.xaml" />
                 <mui:Link DisplayName="Installed Packages" Source="/Views/InstalledPackages.xaml" />
+                <mui:Link DisplayName="Install List" Source="/Views/InstallList.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

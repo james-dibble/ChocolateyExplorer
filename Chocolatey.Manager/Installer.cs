@@ -6,12 +6,23 @@
     using System.Threading.Tasks;
     using Chocolatey.DomainModel;
     using System;
+    using System.Threading;
 
     public class Installer : IChocolateyInstaller
     {
         public event Action<string> OutputReceived;
 
         public async Task Install(ChocolateyPackageVersion package, string arguments)
+        {
+            await this.Install(package, string.Empty, new CancellationToken());
+        }
+
+        public async Task Install(ChocolateyPackageVersion package)
+        {
+            await this.Install(package, string.Empty);
+        }
+
+        public async Task Install(ChocolateyPackageVersion package, string arguments, CancellationToken cancellationToken)
         {
             var args = string.IsNullOrEmpty(arguments) ? string.Empty : " -installArguments " + arguments;
 
@@ -28,15 +39,9 @@
                 var outputCollection = new PSDataCollection<PSObject>();
                 outputCollection.DataAdded += this.SendOutput;
 
-                await Task.Factory.StartNew(() => powershell.Invoke(null, outputCollection, null));
+                await Task.Factory.StartNew(() => powershell.Invoke(null, outputCollection, null), cancellationToken);
             }
         }
-
-        public async Task Install(ChocolateyPackageVersion package)
-        {
-            await this.Install(package, string.Empty);
-        }
-
 
         public async Task Uninstall(ChocolateyPackageVersion package)
         {

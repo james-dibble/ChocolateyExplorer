@@ -25,8 +25,7 @@
             <mui:ModernButton Content="SEARCH" IconData="{StaticResource MagnifyIconData}" Command="{Binding SearchPackagesCommand}" />
             <mui:ModernButton Content="Clear Search Results" IconData="{StaticResource RemoveIconData}" Command="{Binding ClearSearchResultsCommand}" Visibility="{Binding HasSearchResults, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StatusBar>
-        <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
-        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Style="{DynamicResource ResourceKey=StatusBar}" Background="{x:Null}">
+        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" Background="{x:Null}">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel LastChildFill="false" />
@@ -45,6 +44,7 @@
                 </StackPanel>
             </StatusBarItem>
         </StatusBar>
+        <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
@@ -75,9 +75,9 @@
                 </TreeView.ItemTemplate>
             </TreeView>
             <StatusBar Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" >
-                <Button Content="Load More" HorizontalAlignment="Right" Command="{Binding LoadMorePackagesCommand, Mode=OneWay}"  />
+                <mui:ModernButton IconData="{DynamicResource AddMultipleIconData}" Content="Load More" HorizontalAlignment="Right" Command="{Binding LoadMorePackagesCommand, Mode=OneWay}" Margin="0,0,5,0"  />
             </StatusBar>
-            <ScrollViewer Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0,0,5,0" Grid.Row="0" Grid.RowSpan="2">
+            <ScrollViewer Grid.Column="1" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0,0,5,0" Grid.Row="0" Grid.RowSpan="2" Margin="0,0,0,5">
                 <StackPanel>
                     <StackPanel Style="{StaticResource StackedInformation}" Orientation="Vertical">
                         <StackPanel>
@@ -112,7 +112,10 @@
                         <TextBlock Text="{Binding SelectedPackage.Description}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
                         <Label Content="Release Notes" Style="{DynamicResource Title}" />
                         <TextBlock Text="{Binding SelectedPackage.ReleaseNotes}" TextWrapping="Wrap" Style="{DynamicResource Description}" />
-                        <Button Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" Margin="0,10,0,10" />
+                        <StackPanel>
+                            <mui:ModernButton IconData="{DynamicResource AddIconData}" Content="Install" Command="{Binding InstallPackageCommand}" CommandParameter="{Binding SelectedPackage}" Margin="10,10,0,10" />
+                            <mui:ModernButton IconData="{DynamicResource AddMultipleIconData}" Content="Add to Install List" Command="{Binding AddToInstallListCommand}" CommandParameter="{Binding SelectedPackage}" Margin="10,10,0,10" />
+                        </StackPanel>
                     </StackPanel>
                     <DockPanel Width="Auto" LastChildFill="True">
                         <Label Content="Install Arguments" Style="{DynamicResource Title}" DockPanel.Dock="Left" />
