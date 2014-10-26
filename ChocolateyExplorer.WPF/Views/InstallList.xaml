@@ -9,9 +9,7 @@
              DataContext="{Binding Source={StaticResource Locator}, Path=InstallList}">
     <DockPanel LastChildFill="true">
         <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}">
-            <mui:ModernButton IconData="{StaticResource RefreshIconData}" Command="{Binding}" ToolTip="Refresh Installed Packages" />
-            <mui:ModernButton IconData="{StaticResource UpdateIconData}" Command="{Binding}" CommandParameter="{Binding}" ToolTip="Update Selected Package" />
-            <mui:ModernButton IconData="{StaticResource RemoveIconData}" Command="{Binding}" CommandParameter="{Binding}" ToolTip="Uninstall Selected Package" />
+            <mui:ModernButton IconData="{StaticResource MinusIconData}" Command="{Binding RemovePackageFromInstallListCommand}" CommandParameter="{Binding SelectedPackage}" ToolTip="Remove From Install List" />
         </StackPanel>
         <StatusBar HorizontalAlignment="Stretch" DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>
@@ -33,7 +31,7 @@
             </StatusBarItem>
         </StatusBar>
         <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
-        <ListView ItemsSource="{Binding Packages}">
+        <ListView ItemsSource="{Binding Packages}" SelectedItem="{Binding SelectedPackage}">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Remove From Install List"
