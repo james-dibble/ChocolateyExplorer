@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800"
              DataContext="{Binding Source={StaticResource Locator}, Path=InstallList}">
+    <Page.Resources>
+        <mui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Page.Resources>
     <DockPanel LastChildFill="true">
         <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}">
             <mui:ModernButton IconData="{StaticResource MinusIconData}" Command="{Binding RemovePackageFromInstallListCommand}" CommandParameter="{Binding SelectedPackage}" ToolTip="Remove From Install List" />
@@ -18,10 +21,10 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <Label Content="" />
+                <Label Content="{Binding StatusMessage}" />
             </StatusBarItem>
             <StatusBarItem>
-                <ProgressBar IsIndeterminate="True" Height="20" Width="90" Visibility="{Binding}" />
+                <ProgressBar IsIndeterminate="True" Height="20" Width="90" Visibility="{Binding IsWorking, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StatusBarItem>
             <StatusBarItem DockPanel.Dock="Right">
                 <StackPanel Orientation="Horizontal">
@@ -31,7 +34,10 @@
             </StatusBarItem>
         </StatusBar>
         <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
-        <ListView ItemsSource="{Binding Packages}" SelectedItem="{Binding SelectedPackage}">
+        <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Right" >
+            <Button Content="Install Packages" HorizontalAlignment="Right" Command="{Binding InstallPackagesCommand}" Margin="0,0,5,0"  />
+        </StatusBar>
+        <ListView ItemsSource="{Binding Packages}" SelectedItem="{Binding SelectedPackage}" IsEnabled="{Binding CanSelectPackage, Mode=OneWay}">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Remove From Install List"
