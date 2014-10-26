@@ -35,7 +35,8 @@
         </StatusBar>
         <ViewModel:Console DockPanel.Dock="Bottom" Height="200" />
         <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Right" >
-            <Button Content="Install Packages" HorizontalAlignment="Right" Command="{Binding InstallPackagesCommand}" Margin="0,0,5,0"  />
+            <mui:ModernButton IconData="{DynamicResource RemoveIconData}" Content="Cancel" HorizontalAlignment="Right" Command="{Binding CancelInstallCommand}" Margin="0,0,5,0" Visibility="{Binding IsWorking, Converter={StaticResource BooleanToVisibilityConverter}}"  />
+            <mui:ModernButton IconData="{DynamicResource AddMultipleIconData}" Content="Install Packages" HorizontalAlignment="Right" Command="{Binding InstallPackagesCommand}" Margin="0,0,5,0"  />
         </StatusBar>
         <ListView ItemsSource="{Binding Packages}" SelectedItem="{Binding SelectedPackage}" IsEnabled="{Binding CanSelectPackage, Mode=OneWay}">
             <ListView.ContextMenu>

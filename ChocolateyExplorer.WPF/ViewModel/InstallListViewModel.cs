@@ -2,6 +2,7 @@
 {
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using Chocolatey.DomainModel;
@@ -17,6 +18,8 @@
         private ChocolateyPackageVersion _selectedPackage;
         private bool _isWorking;
         private string _statusMessage;
+        private CancellationTokenSource _cancellationToken;
+        private Task _activeTask;
 
         public InstallListViewModel(IChocolateyInstaller installer, ConsoleViewModel console, InstalledPackagesViewModel installedPackages)
         {
@@ -29,10 +32,11 @@
             this.StatusMessage = "Ready";
 
             this.AddPackageToInstallListCommand = new RelayCommand<ChocolateyPackageVersion>(this.AddPackageToInstallList);
-            this.RemovePackageFromInstallListCommand = 
+            this.RemovePackageFromInstallListCommand =
                 new RelayCommand<ChocolateyPackageVersion>(this.RemovePackageToInstallList, package => package != null);
             this.ClearInstallListCommand = new RelayCommand(() => this.Packages.Clear(), () => this.Packages.Any() && !this.IsWorking);
             this.InstallPackagesCommand = new RelayCommand(async () => await this.InstallPackages(), () => this.Packages.Any() && !this.IsWorking);
+            this.CancelInstallCommand = new RelayCommand(async () => await this.CancelInstall());
         }
 
         public ObservableCollection<ChocolateyPackageVersion> Packages { get; private set; }
@@ -44,6 +48,8 @@
         public RelayCommand ClearInstallListCommand { get; private set; }
 
         public RelayCommand InstallPackagesCommand { get; private set; }
+
+        public RelayCommand CancelInstallCommand { get; private set; }
 
         public ChocolateyPackageVersion SelectedPackage
         {
@@ -121,24 +127,43 @@
 
             this._installer.OutputReceived += this.OutputReceived;
 
-            foreach (var package in this.Packages)
+            this._cancellationToken = new CancellationTokenSource();
+
+            try
             {
-                this._console.AddConsoleLine("Installing package {0}", package.Id);
+                foreach (var package in this.Packages)
+                {
+                    if (this._cancellationToken.IsCancellationRequested)
+                    {
+                        this._console.AddConsoleLine("Installation cancelled");
 
-                await this._installer.Install(package);
+                        break;
+                    }
 
-                this._console.AddConsoleLine("Package {0} installed", package.Id);
+                    this._console.AddConsoleLine("Installing package {0}", package.Id);
+
+                    this._activeTask = this._installer.Install(package, string.Empty, this._cancellationToken.Token);
+
+                    await this._activeTask;
+
+                    this._console.AddConsoleLine("Package {0} installed", package.Id);
+                }
+
+                if(!this._cancellationToken.IsCancellationRequested)
+                {
+                    this._console.AddConsoleLine("Installed all packages from list");
+
+                    this.Packages.Clear();
+                    this.SelectedPackage = null;
+                }
             }
+            finally
+            {
+                this._installer.OutputReceived -= this.OutputReceived;
 
-            this._installer.OutputReceived -= this.OutputReceived;
-
-            this._console.AddConsoleLine("Installed all packages from list");
-
-            this.Packages.Clear();
-            this.SelectedPackage = null;
-
-            this.ClearInstallListCommand.RaiseCanExecuteChanged();
-            this.InstallPackagesCommand.RaiseCanExecuteChanged();
+                this.ClearInstallListCommand.RaiseCanExecuteChanged();
+                this.InstallPackagesCommand.RaiseCanExecuteChanged();
+            }
 
             await this._installedPackages.RefreshPackages();
 
@@ -149,6 +174,22 @@
         private void OutputReceived(string obj)
         {
             this._console.AddConsoleLine(obj);
+        }
+
+        private async Task CancelInstall()
+        {
+            if (this._cancellationToken != null && this._cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            if (this._cancellationToken != null && !this._cancellationToken.IsCancellationRequested)
+            {
+                this._cancellationToken.Cancel();
+                await this._activeTask;
+            }
+
+            this._cancellationToken = null;
         }
     }
 }
