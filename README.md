@@ -46,7 +46,6 @@ Future Releases
 ---------------
 + Detect whether Chocolatey is installed.  If not, give user option install it.
 + Better paging functionality; background loading of packages?
-+ Update all installed packages
 + Parse and display release notes and descriptions as Markdown
 + Sign the manifests so installer and applicaiton are trusted
 + Authenticated feeds

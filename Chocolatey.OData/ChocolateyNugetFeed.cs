@@ -140,6 +140,9 @@
                 Version = package.Version,
                 ReleaseNotes = package.ReleaseNotes,
                 DownloadCount = package.DownloadCount,
+                IconLink = string.IsNullOrEmpty(package.IconUrl)
+                        ? null
+                        : new Uri(package.IconUrl),
                 ProjectLink =
                     string.IsNullOrEmpty(package.ProjectUrl)
                         ? null

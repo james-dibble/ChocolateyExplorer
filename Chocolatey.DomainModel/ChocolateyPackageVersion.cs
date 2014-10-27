@@ -20,5 +20,7 @@ namespace Chocolatey.DomainModel
         public int DownloadCount { get; set; }
 
         public Uri ProjectLink { get; set; }
+
+        public Uri IconLink { get; set; }
     }
 }
