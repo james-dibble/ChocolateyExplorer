@@ -63,6 +63,7 @@
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Versions}">
                         <StackPanel Orientation="Horizontal">
+                            <!--<Path Width="20" Height="20" Stretch="Fill" Fill="#FF000000" Data="{StaticResource CheckIconData}" Visibility="{Binding}" />-->
                             <Image Height="20" Width="20" Source="{Binding IconLink}" Stretch="Uniform" Margin="0,0,5,0" />
                             <TextBlock Text="{Binding Title}" FontWeight="Bold" Margin="0,0,5,0" />
                             <TextBlock Text="{Binding Id}" />
