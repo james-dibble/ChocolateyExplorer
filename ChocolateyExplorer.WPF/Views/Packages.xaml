@@ -3,13 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ChocolateyExplorer.WPF.Views;assembly=ChocolateyExplorer.WPF"  x:Class="ChocolateyExplorer.WPF.Views.Packages" 
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800"
+             xmlns:local="clr-namespace:ChocolateyExplorer.WPF.Views;assembly=ChocolateyExplorer.WPF"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"
-             xmlns:mui="http://firstfloorsoftware.com/ModernUI">
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI" xmlns:WPF="clr-namespace:ChocolateyExplorer.WPF"  x:Class="ChocolateyExplorer.WPF.Views.Packages" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800"
+             >
     <UserControl.Resources>
+        <WPF:VisibilityHiddenConverter x:Key="VisibilityHiddenConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
@@ -19,7 +21,7 @@
         <StatusBar DockPanel.Dock="Top">
             <TextBox Width="200" HorizontalAlignment="Right" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanSearchPackages}">
                 <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding SearchPackagesCommand}"></KeyBinding>
+                    <KeyBinding Key="Enter" Command="{Binding SearchPackagesCommand}"/>
                 </TextBox.InputBindings>
             </TextBox>
             <mui:ModernButton Content="SEARCH" IconData="{StaticResource MagnifyIconData}" Command="{Binding SearchPackagesCommand}" />
@@ -63,7 +65,7 @@
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Versions}">
                         <StackPanel Orientation="Horizontal">
-                            <!--<Path Width="20" Height="20" Stretch="Fill" Fill="#FF000000" Data="{StaticResource CheckIconData}" Visibility="{Binding}" />-->
+                            <Path Width="15" Height="15" Stretch="Fill" Fill="#FF000000" Data="{StaticResource CheckIconData}" Visibility="{Binding IsInstalled, Converter={StaticResource VisibilityHiddenConverter}}" Margin="0,0,5,0" />
                             <Image Height="20" Width="20" Source="{Binding IconLink}" Stretch="Uniform" Margin="0,0,5,0" />
                             <TextBlock Text="{Binding Title}" FontWeight="Bold" Margin="0,0,5,0" />
                             <TextBlock Text="{Binding Id}" />
@@ -106,7 +108,9 @@
                             <Label Content="Project Link" Style="{DynamicResource Title}" />
                             <Label>
                                 <Hyperlink NavigateUri="{Binding SelectedPackage.ProjectLink}" RequestNavigate="Hyperlink_RequestNavigate" >
-                                    <Label Content="{Binding SelectedPackage.ProjectLink}" />
+                                    <InlineUIContainer>
+                                        <Label Content="{Binding SelectedPackage.ProjectLink}" />
+                                    </InlineUIContainer>
                                 </Hyperlink>
                             </Label>
                         </StackPanel>

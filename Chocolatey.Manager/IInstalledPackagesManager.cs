@@ -7,5 +7,7 @@
     public interface IInstalledPackagesManager
     {
         Task<IEnumerable<ChocolateyPackageVersion>> RetrieveInstalledPackages();
+
+        Task<IEnumerable<ChocolateyPackageVersion>> RetrieveInstalledPackages(bool forceRefresh);
     }
 }

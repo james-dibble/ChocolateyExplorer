@@ -7,17 +7,20 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Chocolatey.DomainModel;
+    using Chocolatey.Manager;
     using Chocolatey.OData.Nuget;
 
     public class ChocolateyNugetFeed : IChocolateyFeed
     {
         private readonly PackageContext  _feedClient;
+        private readonly IInstalledPackagesManager _installedPackages;
         private DataServiceQueryContinuation<Package> _nextPage;
         private IList<ChocolateyPackageVersion> _packageCache;
 
-        public ChocolateyNugetFeed(PackageContext feedClient, ChocolateySource source)
+        public ChocolateyNugetFeed(PackageContext feedClient, ChocolateySource source, IInstalledPackagesManager installedPackages)
         {
             this._feedClient = feedClient;
+            this._installedPackages = installedPackages;
             this.Source = source;
 
             this._packageCache = new List<ChocolateyPackageVersion>();
@@ -47,14 +50,14 @@
 
             this._nextPage = response.GetContinuation();
 
-            return this._packageCache.GroupPackages();
+            return this._packageCache.GroupPackages(await this._installedPackages.RetrieveInstalledPackages());
         }
 
         public async Task<IEnumerable<ChocolateyPackage>> LoadFirstPage()
         {
             if(this._packageCache.Any())
             {
-                return this._packageCache.GroupPackages();
+                return this._packageCache.GroupPackages(await this._installedPackages.RetrieveInstalledPackages());
             }
 
             var query = this._feedClient.Packages;
@@ -67,7 +70,7 @@
 
             this._nextPage = response.GetContinuation();
 
-            return this._packageCache.GroupPackages();
+            return this._packageCache.GroupPackages(await this._installedPackages.RetrieveInstalledPackages());
         }
 
         public async Task<IEnumerable<ChocolateyPackage>> SearchPackages(string criteria, CancellationToken cancellationToken)
@@ -87,9 +90,9 @@
 
             var nextQuery = response.GetContinuation();
 
-            this.RaisePageOfPackagesLoaded(allPackages.GroupPackages());
+            this.RaisePageOfPackagesLoaded(allPackages.GroupPackages(await this._installedPackages.RetrieveInstalledPackages()));
 
-            return (await this.RetrievePackagesInternal(nextQuery, allPackages, cancellationToken)).GroupPackages();
+            return (await this.RetrievePackagesInternal(nextQuery, allPackages, cancellationToken)).GroupPackages(await this._installedPackages.RetrieveInstalledPackages());
         }
 
         private async Task<IEnumerable<ChocolateyPackageVersion>> RetrievePackagesInternal(DataServiceQueryContinuation<Package> query, IList<ChocolateyPackageVersion> currentPackages, CancellationToken cancellationToken)
@@ -108,7 +111,7 @@
 
             var nextQuery = currentResponse.GetContinuation();
 
-            this.RaisePageOfPackagesLoaded(currentPackages.GroupPackages());
+            this.RaisePageOfPackagesLoaded(currentPackages.GroupPackages(await this._installedPackages.RetrieveInstalledPackages()));
 
             return await this.RetrievePackagesInternal(nextQuery, currentPackages, cancellationToken);
         }

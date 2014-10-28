@@ -151,6 +151,7 @@
     <Compile Include="Views\Sources.xaml.cs">
       <DependentUpon>Sources.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VisibilityHiddenConverter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

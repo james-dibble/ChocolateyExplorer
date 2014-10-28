@@ -8,7 +8,9 @@
 
     public static class PackageOrginiser
     {
-        public static IEnumerable<ChocolateyPackage> GroupPackages(this IEnumerable<ChocolateyPackageVersion> packageVersions)
+        public static IEnumerable<ChocolateyPackage> GroupPackages(
+            this IEnumerable<ChocolateyPackageVersion> packageVersions, 
+            IEnumerable<ChocolateyPackageVersion> installedPackages)
         {
             var allPackages = packageVersions.ToList();
 
@@ -20,6 +22,7 @@
                               {
                                   Id = chocolateyPackageVersion.Id,
                                   Title = chocolateyPackageVersion.Title,
+                                  IsInstalled = installedPackages.Any(p => p.Id == chocolateyPackageVersion.Id),
                                   Versions =
                                       allPackages.Where(pv => pv.Id == version.Id).OrderByDescending(pv => pv.Version)
                               };

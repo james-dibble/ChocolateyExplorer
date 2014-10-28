@@ -41,10 +41,10 @@ namespace ChocolateyExplorer.WPF.ViewModel
             SimpleIoc.Default.Register<AboutViewModel>();
             SimpleIoc.Default.Register<InstallListViewModel>();
 
+            SimpleIoc.Default.Register<IInstalledPackagesManager, InstalledPackages>();
             SimpleIoc.Default.Register<IChocolateyFeedFactory, ChocolateyFeedFactory>();
             SimpleIoc.Default.Register<ISourcesManager, Sources>();
             SimpleIoc.Default.Register<IChocolateyInstaller, Installer>();
-            SimpleIoc.Default.Register<IInstalledPackagesManager, InstalledPackages>();
         }
 
         public MainViewModel Main

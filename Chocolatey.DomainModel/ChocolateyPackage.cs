@@ -12,6 +12,8 @@
 
         public Uri IconLink { get { return this.LatestVersion.IconLink; } }
 
+        public bool IsInstalled { get; set; }
+
         public IEnumerable<ChocolateyPackageVersion> Versions { get; set; }
 
         public ChocolateyPackageVersion LatestVersion

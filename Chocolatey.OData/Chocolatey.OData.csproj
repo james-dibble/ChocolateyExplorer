@@ -101,6 +101,10 @@
       <Project>{0d8e38ad-1ddc-43b6-ba16-8175becb2eaf}</Project>
       <Name>Chocolatey.DomainModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chocolatey.Manager\Chocolatey.Manager.csproj">
+      <Project>{d196e974-e905-432d-ac7b-006ea93773da}</Project>
+      <Name>Chocolatey.Manager</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\Nuget\Reference.datasvcmap">

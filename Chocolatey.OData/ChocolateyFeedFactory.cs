@@ -4,16 +4,20 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Chocolatey.DomainModel;
+    using Chocolatey.Manager;
     using Chocolatey.OData.Nuget;
     using Chocolatey.OData.Service;
 
     public class ChocolateyFeedFactory : IChocolateyFeedFactory
     {
         private readonly IDictionary<ChocolateySource, IChocolateyFeed> _feedCache;
+        private readonly IInstalledPackagesManager _installedPackages;
 
-        public ChocolateyFeedFactory()
+
+        public ChocolateyFeedFactory(IInstalledPackagesManager installedPackages)
         {
             this._feedCache = new Dictionary<ChocolateySource, IChocolateyFeed>();
+            this._installedPackages = installedPackages;
         }
 
         public async Task<bool> ValidateSource(Uri source)
@@ -47,13 +51,13 @@
             {
                 var nugetClient = new PackageContext(source.Location);
 
-                feed = new ChocolateyNugetFeed(nugetClient, source);
+                feed = new ChocolateyNugetFeed(nugetClient, source, this._installedPackages);
             }
             else
             {
                 var client = new ChocolateyFeedClient(source.Location);
 
-                feed = new ChocolateyFeed(client, source);
+                feed = new ChocolateyFeed(client, source, this._installedPackages);
             }
 
             this._feedCache.Add(source, feed);

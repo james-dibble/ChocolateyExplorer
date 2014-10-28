@@ -110,7 +110,7 @@
             this.StatusMessage = "Loading Installed Packages";
             this.IsWorking = true;
 
-            var installedPackages = await this._packagesManager.RetrieveInstalledPackages();
+            var installedPackages = await this._packagesManager.RetrieveInstalledPackages(true);
 
             this.InstalledPackages.Clear();
 
