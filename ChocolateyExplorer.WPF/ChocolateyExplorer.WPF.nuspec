@@ -12,6 +12,10 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Chocolatey Explorer is an application to make Chocolatey that little bit more awesome by giving you control over it's basic functions without having to break out PowerShell.</description>
         <releaseNotes>
+### 0.2.1.106
++ Display the packages icon if one exists in the package menu
++ Indicate a package that is already installed
+
 ### 0.2.1.100
 + First complete release
 + Default to latest package when selecting one from the tree view
@@ -43,6 +47,14 @@
 + Search a source
 + Load all of the packages from a source
 + View package information
+
+Future Releases
+---------------
++ Detect whether Chocolatey is installed.  If not, give user option install it.
++ Better paging functionality; background loading of packages?
++ Parse and display release notes and descriptions as Markdown
++ Sign the manifests so installer and applicaiton are trusted
++ Authenticated feeds
         </releaseNotes>
         <copyright>Copyright (c) 2014 James Dibble. All rights reserved.</copyright>
         <dependencies>

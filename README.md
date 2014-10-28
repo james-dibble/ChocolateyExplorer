@@ -10,6 +10,10 @@ Chocolatey Explorer is distributed via ClickOnce.  Get your copy [here](http://c
 
 Changelog
 ---------
+### 0.2.1.106
++ Display the packages icon if one exists in the package menu
++ Indicate a package that is already installed
+
 ### 0.2.1.100
 + First complete release
 + Default to latest package when selecting one from the tree view
