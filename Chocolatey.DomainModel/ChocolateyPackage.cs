@@ -10,7 +10,7 @@
 
         public string Title { get; set; }
 
-        public Uri IconLink { get { return this.LatestVersion.IconLink; } }
+        public Uri IconLink { get; set; }
 
         public bool IsInstalled { get; set; }
 
