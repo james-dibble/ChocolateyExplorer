@@ -40,17 +40,17 @@
         {
             var query = this._feedClient.Packages.Where(p => p.IsLatestVersion) as DataServiceQuery<FeedPackage>;
 
-            var retrievePackagesTask = Task.Factory.FromAsync(query.BeginExecute, result => query.EndExecute(result), TaskCreationOptions.None);
+            var retrievePackagesTask = this.ExecuteQuery(query);
 
             var installedPackages = await this._installedPackages.RetrieveInstalledPackages();
 
-            var queryOperation = await retrievePackagesTask as QueryOperationResponse<FeedPackage>;
+            var queryResult = await retrievePackagesTask as QueryOperationResponse<FeedPackage>;
 
-            var convertedPackages = queryOperation.Select(package => this.ConvertToPackage(package, installedPackages)).ToList();
+            var convertedPackages = queryResult.Select(package => this.ConvertToPackage(package, installedPackages)).ToList();
 
             this.MergePackagesIntoCache(convertedPackages);
 
-            this._nextPage = queryOperation.GetContinuation();
+            this._nextPage = queryResult.GetContinuation();
 
             return convertedPackages;
         }
@@ -62,11 +62,9 @@
                 throw new InvalidOperationException("No page to retireve packages from.");
             }
 
-            var retrievePackagesTask = Task.Factory.FromAsync<DataServiceQueryContinuation<FeedPackage>, OperationResponse>(
-                this._feedClient.BeginExecute,
-                this._feedClient.EndExecute,
-                this._nextPage,
-                null);
+            var retrievePackagesTask = Task.Factory.FromAsync<IEnumerable<FeedPackage>>(
+                this._feedClient.BeginExecute<FeedPackage>(this._nextPage, null, null),
+                queryAsyncResult => this._feedClient.EndExecute<FeedPackage>(queryAsyncResult));
 
             var installedPackages = await this._installedPackages.RetrieveInstalledPackages();
 
@@ -83,36 +81,61 @@
 
         public async Task<IEnumerable<ChocolateyPackage>> SearchPackages(string criteria, CancellationToken cancellationToken)
         {
-            var searchOptionTemplate = @"(substringof('{0}',tolower(Id)) eq true) or (substringof('{0}',tolower(Title)) eq true) or (substringof('{0}',tolower(Description)) eq true)";
+            var searchOptionTemplate = @"IsLatestVersion and ((substringof('{0}',tolower(Id)) eq true) or (substringof('{0}',tolower(Title)) eq true) or (substringof('{0}',tolower(Description)) eq true))";
 
-            var query = this._feedClient.Packages.AddQueryOption("$filter", string.Format(searchOptionTemplate, criteria.ToLower()));
+            var query = this._feedClient.Packages.AddQueryOption("$filter", string.Format(searchOptionTemplate, criteria.ToLower())) as DataServiceQuery<FeedPackage>;
 
-            return null;
+            var queryResultTask = this.ExecuteQuery(query);
+
+            var installedPackages = await this._installedPackages.RetrieveInstalledPackages();
+
+            var queryResult = await queryResultTask;
+
+            var convertedPackages = queryResult.Select(package => this.ConvertToPackage(package, installedPackages)).ToList();
+
+            this.RaisePageOfPackagesLoaded(convertedPackages);
+
+            var nextQuery = queryResult.GetContinuation();
+
+            return await this.RetrievePackagesInternal(nextQuery, convertedPackages, cancellationToken);
         }
 
         public Task<IEnumerable<ChocolateyPackageVersion>> GetPackageVersions(ChocolateyPackage package)
         {
             throw new NotImplementedException();
         }
-
-
-        private async Task<IEnumerable<ChocolateyPackageVersion>> RetrievePackagesInternal(DataServiceQueryContinuation<FeedPackage> query, IList<ChocolateyPackageVersion> currentPackages, CancellationToken cancellationToken)
+        
+        private async Task<IEnumerable<ChocolateyPackage>> RetrievePackagesInternal(
+            DataServiceQueryContinuation<FeedPackage> query,
+            IList<ChocolateyPackage> currentPackages,
+            CancellationToken cancellationToken)
         {
             if (query == null || cancellationToken.IsCancellationRequested)
             {
                 return currentPackages;
             }
 
-            var currentResponse = await Task.Factory.StartNew(() => this._feedClient.Execute(query));
+            var retrievePackagesTask = new TaskFactory(cancellationToken).FromAsync<IEnumerable<FeedPackage>>(
+                this._feedClient.BeginExecute<FeedPackage>(this._nextPage, null, null),
+                queryAsyncResult => this._feedClient.EndExecute<FeedPackage>(queryAsyncResult));
 
-            foreach (var feedPackage in currentResponse)
+            if (cancellationToken.IsCancellationRequested)
             {
-                currentPackages.Add(ConvertToPackageVersion(feedPackage));
+                return currentPackages;
             }
 
-            var nextQuery = currentResponse.GetContinuation();
+            var installedPackages = await this._installedPackages.RetrieveInstalledPackages();
 
-            this.RaisePageOfPackagesLoaded(currentPackages.GroupPackages(await this._installedPackages.RetrieveInstalledPackages()));
+            var queryOperation = await retrievePackagesTask as QueryOperationResponse<FeedPackage>;
+
+            foreach (var feedPackage in queryOperation)
+            {
+                currentPackages.Add(ConvertToPackage(feedPackage, installedPackages));
+            }
+
+            this.RaisePageOfPackagesLoaded(currentPackages);
+
+            var nextQuery = queryOperation.GetContinuation();
 
             return await this.RetrievePackagesInternal(nextQuery, currentPackages, cancellationToken);
         }
@@ -131,6 +154,15 @@
             {
                 this.PageOfPackagesLoaded(loadedPackages);
             }
+        }
+
+        private async Task<QueryOperationResponse<FeedPackage>> ExecuteQuery(DataServiceQuery<FeedPackage> query)
+        {
+            var retrievePackagesTask = Task.Factory.FromAsync(query.BeginExecute, result => query.EndExecute(result), TaskCreationOptions.None);
+
+            var queryOperation = await retrievePackagesTask as QueryOperationResponse<FeedPackage>;
+
+            return queryOperation;
         }
 
         private ChocolateyPackage ConvertToPackage(FeedPackage package, IEnumerable<ChocolateyPackageVersion> installedPackages)
