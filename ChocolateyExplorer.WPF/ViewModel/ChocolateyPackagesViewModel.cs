@@ -405,7 +405,7 @@
                     this.IsWorking = true;
                     this.StatusMessage = "Loading Versions";
 
-                    foreach (var version in await this._feed.GetPackageVersions(selectedPackage))
+                    foreach (var version in (await this._feed.GetPackageVersions(selectedPackage)).OrderByDescending(pv => pv.Version))
                     {
                         selectedPackage.Versions.Add(version);
                     }

@@ -104,11 +104,7 @@
         {
             var query = this._feedClient.Packages.Where(p => p.Id == package.Id) as DataServiceQuery<FeedPackage>;
 
-            var queryResultTask = this.ExecuteQuery(query);
-
-            var installedPackages = await this._installedPackages.RetrieveInstalledPackages();
-
-            var queryResult = await queryResultTask;
+            var queryResult = await this.ExecuteQuery(query);
 
             var convertedPackages = queryResult.Select(p => ConvertToPackageVersion(p)).ToList();
             
@@ -128,7 +124,7 @@
             }
 
             var retrievePackagesTask = new TaskFactory(cancellationToken).FromAsync<IEnumerable<FeedPackage>>(
-                this._feedClient.BeginExecute<FeedPackage>(this._nextPage, null, null),
+                this._feedClient.BeginExecute<FeedPackage>(query, null, null),
                 queryAsyncResult => this._feedClient.EndExecute<FeedPackage>(queryAsyncResult));
 
             if (cancellationToken.IsCancellationRequested)
@@ -162,11 +158,9 @@
             }
 
             var retrievePackagesTask = Task.Factory.FromAsync<IEnumerable<FeedPackage>>(
-                this._feedClient.BeginExecute<FeedPackage>(this._nextPage, null, null),
+                this._feedClient.BeginExecute<FeedPackage>(query, null, null),
                 queryAsyncResult => this._feedClient.EndExecute<FeedPackage>(queryAsyncResult));
             
-            var installedPackages = await this._installedPackages.RetrieveInstalledPackages();
-
             var queryOperation = await retrievePackagesTask as QueryOperationResponse<FeedPackage>;
 
             foreach (var feedPackage in queryOperation)
