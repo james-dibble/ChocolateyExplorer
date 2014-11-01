@@ -24,10 +24,6 @@
                 <Label Content="Location" />
                 <TextBox Text="{Binding NewSourceLocation}" />
             </StackPanel>
-            <StackPanel Style="{DynamicResource Form}">
-                <Label Content="Nuget Feed" />
-                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsNewSourceNuget}" />
-            </StackPanel>
             <Button Content="Add Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" Visibility="{Binding IsAddingSource, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="100,16,0,0" HorizontalAlignment="Left" />
             <Button Content="Update Chocolatey Source" DockPanel.Dock="Top" Command="{Binding AddSourceCommand, Mode=OneWay}" Visibility="{Binding CanEditSource, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="100,16,0,0" HorizontalAlignment="Left" />
         </StackPanel>

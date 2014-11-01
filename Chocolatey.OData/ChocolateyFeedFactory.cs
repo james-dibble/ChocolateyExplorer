@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
     using Chocolatey.DomainModel;
     using Chocolatey.Manager;
-    using Chocolatey.OData.Nuget;
     using Chocolatey.OData.Service;
 
     public class ChocolateyFeedFactory : IChocolateyFeedFactory
