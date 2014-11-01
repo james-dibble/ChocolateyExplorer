@@ -100,9 +100,21 @@
             return await this.RetrievePackagesInternal(nextQuery, convertedPackages, cancellationToken);
         }
 
-        public Task<IEnumerable<ChocolateyPackageVersion>> GetPackageVersions(ChocolateyPackage package)
+        public async Task<IEnumerable<ChocolateyPackageVersion>> GetPackageVersions(ChocolateyPackage package)
         {
-            throw new NotImplementedException();
+            var query = this._feedClient.Packages.Where(p => p.Id == package.Id) as DataServiceQuery<FeedPackage>;
+
+            var queryResultTask = this.ExecuteQuery(query);
+
+            var installedPackages = await this._installedPackages.RetrieveInstalledPackages();
+
+            var queryResult = await queryResultTask;
+
+            var convertedPackages = queryResult.Select(p => ConvertToPackageVersion(p)).ToList();
+            
+            var nextQuery = queryResult.GetContinuation();
+
+            return await this.RetrievePackagesInternal(nextQuery, convertedPackages);
         }
         
         private async Task<IEnumerable<ChocolateyPackage>> RetrievePackagesInternal(
@@ -138,6 +150,33 @@
             var nextQuery = queryOperation.GetContinuation();
 
             return await this.RetrievePackagesInternal(nextQuery, currentPackages, cancellationToken);
+        }
+
+        private async Task<IEnumerable<ChocolateyPackageVersion>> RetrievePackagesInternal(
+            DataServiceQueryContinuation<FeedPackage> query,
+            IList<ChocolateyPackageVersion> currentPackages)
+        {
+            if (query == null)
+            {
+                return currentPackages;
+            }
+
+            var retrievePackagesTask = Task.Factory.FromAsync<IEnumerable<FeedPackage>>(
+                this._feedClient.BeginExecute<FeedPackage>(this._nextPage, null, null),
+                queryAsyncResult => this._feedClient.EndExecute<FeedPackage>(queryAsyncResult));
+            
+            var installedPackages = await this._installedPackages.RetrieveInstalledPackages();
+
+            var queryOperation = await retrievePackagesTask as QueryOperationResponse<FeedPackage>;
+
+            foreach (var feedPackage in queryOperation)
+            {
+                currentPackages.Add(ConvertToPackageVersion(feedPackage));
+            }
+
+            var nextQuery = queryOperation.GetContinuation();
+
+            return await this.RetrievePackagesInternal(nextQuery, currentPackages);
         }
 
         private void MergePackagesIntoCache(IEnumerable<ChocolateyPackage> newPackages)

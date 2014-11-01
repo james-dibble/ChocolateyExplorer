@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Input;
     using Chocolatey.DomainModel;
@@ -84,11 +85,8 @@
             {
                 this._isWorking = value;
 
-                if (value)
-                {
-                    this.CanSelectPackage = false;
-                }
-
+                this.CanSelectPackage = !value;
+                
                 this.RaisePropertyChanged(() => this.IsWorking);
                 this.LoadMorePackagesCommand.RaiseCanExecuteChanged();
                 this.SearchPackagesCommand.RaiseCanExecuteChanged();
@@ -396,12 +394,26 @@
             this.SearchTerm = string.Empty;
         }
 
-        private void SetSelectedPackageVersion(RoutedPropertyChangedEventArgs<object> packageChangedArguments)
+        private async Task SetSelectedPackageVersion(RoutedPropertyChangedEventArgs<object> packageChangedArguments)
         {
             var selectedPackage = packageChangedArguments.NewValue as ChocolateyPackage;
 
             if(selectedPackage != null)
             {
+                if(!selectedPackage.Versions.Any())
+                {
+                    this.IsWorking = true;
+                    this.StatusMessage = "Loading Versions";
+
+                    foreach (var version in await this._feed.GetPackageVersions(selectedPackage))
+                    {
+                        selectedPackage.Versions.Add(version);
+                    }
+                    
+                    this.IsWorking = false;
+                    this.StatusMessage = "Ready";
+                }
+
                 this.SelectedPackage = selectedPackage.LatestVersion;
 
                 return;
@@ -449,7 +461,7 @@
                     this._feed != null && !this.IsWorking && !string.IsNullOrEmpty(this.SearchTerm)
                     && this.SearchTerm.Length > 2);
             this.SetSelectedPackageCommand =
-                new RelayCommand<RoutedPropertyChangedEventArgs<object>>(this.SetSelectedPackageVersion);
+                new RelayCommand<RoutedPropertyChangedEventArgs<object>>(async args => await this.SetSelectedPackageVersion(args));
             this.LoadAllPackagesCommand = new RelayCommand(
                 async () => await this.LoadPackages(),
                 () => this._feed != null && !this.IsWorking);
