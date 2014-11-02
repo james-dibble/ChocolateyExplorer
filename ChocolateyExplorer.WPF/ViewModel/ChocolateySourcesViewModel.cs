@@ -18,7 +18,6 @@
         private ChocolateySource _selectedChocolateySource;
         private string _newSourceId;
         private Uri _newSourceLocation;
-        private bool _isNewSourceNuget;
         private bool _canEditSource;
 
         public ChocolateySourcesViewModel(ISourcesManager sourcesManager, IChocolateyFeedFactory feedFactory)
@@ -70,20 +69,6 @@
             }
         }
 
-        public bool IsNewSourceNuget
-        {
-            get
-            {
-                return this._isNewSourceNuget;
-            }
-            set
-            {
-                this._isNewSourceNuget = value;
-
-                this.RaisePropertyChanged(() => this.IsNewSourceNuget);
-            }
-        }
-
         public bool IsAddingSource
         {
             get
@@ -123,14 +108,12 @@
                 {
                     this.NewSourceId = value.Name;
                     this.NewSourceLocation = value.Location;
-                    this.IsNewSourceNuget = value.IsNugetFeed;
                     this.CanEditSource = true;
                 }
                 else
                 {
                     this.NewSourceId = null;
                     this.NewSourceLocation = null;
-                    this.IsNewSourceNuget = false;
                     this.CanEditSource = false;
                 }
 
@@ -160,8 +143,7 @@
             var newSource = new ChocolateySource
             {
                 Name = this.NewSourceId,
-                Location = this.NewSourceLocation,
-                IsNugetFeed = this.IsNewSourceNuget
+                Location = this.NewSourceLocation
             };
 
             this.RemoveSource(newSource);
@@ -172,7 +154,6 @@
 
             this.NewSourceId = string.Empty;
             this.NewSourceLocation = null;
-            this.IsNewSourceNuget = false;
         }
 
         private void RemoveSource(ChocolateySource source)

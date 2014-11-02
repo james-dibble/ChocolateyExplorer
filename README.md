@@ -10,6 +10,14 @@ Chocolatey Explorer is distributed via ClickOnce.  Get your copy [here](http://c
 
 Changelog
 ---------
+### 0.2.2.110 
+[Realease Notes](https://github.com/james-dibble/ChocolateyExplorer/milestones/0.2.2.0)
+
++ Improved paging - Loads more packages at once
++ Support for a greater number of HTTP based Chocolatey feeds
++ Only load versions of packages that are of interest
++ Create an install list and export it as a setup script
+
 ### 0.2.1.106
 + Display the packages icon if one exists in the package menu
 + Indicate a package that is already installed

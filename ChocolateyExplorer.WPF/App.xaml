@@ -92,6 +92,9 @@
             <PathGeometry x:Key="CheckIconData">
                 F1 M 32.222,33.4875L 39.1886,40.0582L 51.3802,26.1251L 54.7052,29.0542L 39.5845,47.5L 28.897,36.8125L 32.222,33.4875 Z M 24,27L 48.5,27L 45.5,30L 27,30L 27,49L 46,49L 46,42.5L 49,38.75L 49,52L 24,52L 24,27 Z
             </PathGeometry>
+            <PathGeometry x:Key="SaveIconData">
+                F1 M 20,20L 50.25,20L 56,25.75L 56,56L 20,56L 20,20 Z M 52,27.25L 48.75,24L 48,24L 48,37L 28,37L 28,24L 24,24L 24,52L 52,52L 52,27.25 Z M 39,24L 39,34L 44,34L 44,24L 39,24 Z
+            </PathGeometry>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

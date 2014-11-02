@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ChocolateyExplorer.WPF.ViewModel;
+using Microsoft.Win32;
 
 namespace ChocolateyExplorer.WPF.Views
 {
@@ -23,6 +25,27 @@ namespace ChocolateyExplorer.WPF.Views
         public InstallList()
         {
             InitializeComponent();
+        }
+        
+        private void SaveSetupScriptClick(object sender, RoutedEventArgs e)
+        {
+            var viewModel = this.DataContext as InstallListViewModel;
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                DefaultExt = "ps1",
+                Filter = "PowerShell Script|*.ps1",
+                Title = "Save Setup Script"
+            };
+
+            if (saveFileDialog.ShowDialog().Value)
+            {
+                viewModel.SetupScriptSaveLocation = saveFileDialog.FileName;
+            }
+            else
+            {
+                viewModel.SetupScriptSaveLocation = null;
+            }
         }
     }
 }

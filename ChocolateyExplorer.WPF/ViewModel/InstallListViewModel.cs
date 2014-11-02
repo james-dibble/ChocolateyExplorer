@@ -15,17 +15,19 @@
         private readonly IChocolateyInstaller _installer;
         private readonly ConsoleViewModel _console;
         private readonly InstalledPackagesViewModel _installedPackages;
+        private readonly ISetupScriptCreator _scriptCreator;
         private ChocolateyPackageVersion _selectedPackage;
         private bool _isWorking;
         private string _statusMessage;
         private CancellationTokenSource _cancellationToken;
         private Task _activeTask;
 
-        public InstallListViewModel(IChocolateyInstaller installer, ConsoleViewModel console, InstalledPackagesViewModel installedPackages)
+        public InstallListViewModel(IChocolateyInstaller installer, ConsoleViewModel console, InstalledPackagesViewModel installedPackages, ISetupScriptCreator scriptCreator)
         {
             this._installer = installer;
             this._console = console;
             this._installedPackages = installedPackages;
+            this._scriptCreator = scriptCreator;
 
             this.Packages = new ObservableCollection<ChocolateyPackageVersion>();
             this.IsWorking = false;
@@ -37,6 +39,7 @@
             this.ClearInstallListCommand = new RelayCommand(() => this.Packages.Clear(), () => this.Packages.Any() && !this.IsWorking);
             this.InstallPackagesCommand = new RelayCommand(async () => await this.InstallPackages(), () => this.Packages.Any() && !this.IsWorking);
             this.CancelInstallCommand = new RelayCommand(async () => await this.CancelInstall());
+            this.SaveSetupScriptCommand = new RelayCommand(this.SaveSetupScript, () => this.Packages.Any() && !this.IsWorking);
         }
 
         public ObservableCollection<ChocolateyPackageVersion> Packages { get; private set; }
@@ -50,6 +53,8 @@
         public RelayCommand InstallPackagesCommand { get; private set; }
 
         public RelayCommand CancelInstallCommand { get; private set; }
+
+        public RelayCommand SaveSetupScriptCommand { get; private set; }
 
         public ChocolateyPackageVersion SelectedPackage
         {
@@ -102,12 +107,15 @@
             }
         }
 
+        public string SetupScriptSaveLocation { get; set; }
+
         public void AddPackageToInstallList(ChocolateyPackageVersion package)
         {
             this.Packages.Add(package);
 
             this.ClearInstallListCommand.RaiseCanExecuteChanged();
             this.InstallPackagesCommand.RaiseCanExecuteChanged();
+            this.SaveSetupScriptCommand.RaiseCanExecuteChanged();
         }
 
         public void RemovePackageToInstallList(ChocolateyPackageVersion package)
@@ -116,6 +124,7 @@
 
             this.ClearInstallListCommand.RaiseCanExecuteChanged();
             this.InstallPackagesCommand.RaiseCanExecuteChanged();
+            this.SaveSetupScriptCommand.RaiseCanExecuteChanged();
         }
 
         public async Task InstallPackages()
@@ -149,7 +158,7 @@
                     this._console.AddConsoleLine("Package {0} installed", package.Id);
                 }
 
-                if(!this._cancellationToken.IsCancellationRequested)
+                if (!this._cancellationToken.IsCancellationRequested)
                 {
                     this._console.AddConsoleLine("Installed all packages from list");
 
@@ -163,6 +172,7 @@
 
                 this.ClearInstallListCommand.RaiseCanExecuteChanged();
                 this.InstallPackagesCommand.RaiseCanExecuteChanged();
+                this.SaveSetupScriptCommand.RaiseCanExecuteChanged();
             }
 
             await this._installedPackages.RefreshPackages();
@@ -190,6 +200,16 @@
             }
 
             this._cancellationToken = null;
+        }
+
+        private void SaveSetupScript()
+        {
+            if(string.IsNullOrEmpty(this.SetupScriptSaveLocation))
+            {
+                return;
+            }
+
+            this._scriptCreator.CreateSeuptScript(this.Packages, this.SetupScriptSaveLocation);
         }
     }
 }

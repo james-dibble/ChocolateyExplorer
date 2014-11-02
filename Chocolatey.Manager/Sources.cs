@@ -29,8 +29,7 @@
             var sources = config.Descendants("source").Select(s => new ChocolateySource 
             { 
                 Name = s.Attribute("id").Value, 
-                Location = new Uri(s.Attribute("value").Value),
-                IsNugetFeed = s.Attributes().Any(a => a.Name == "nuget") && s.Attribute("nuget").Value == "true"
+                Location = new Uri(s.Attribute("value").Value)
             });
 
             return sources;
@@ -43,7 +42,7 @@
 
             var config = XDocument.Load(ConfigurationLocation);
 
-            var newElement = new XElement("source", new XAttribute("id", source.Name), new XAttribute("value", source.Location.AbsoluteUri), new XAttribute("nuget", source.IsNugetFeed));
+            var newElement = new XElement("source", new XAttribute("id", source.Name), new XAttribute("value", source.Location.AbsoluteUri));
 
             config.Descendants("sources").FirstOrDefault().Add(newElement);
 
