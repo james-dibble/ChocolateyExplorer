@@ -45,6 +45,7 @@ namespace ChocolateyExplorer.WPF.ViewModel
             SimpleIoc.Default.Register<IChocolateyFeedFactory, ChocolateyFeedFactory>();
             SimpleIoc.Default.Register<ISourcesManager, Sources>();
             SimpleIoc.Default.Register<IChocolateyInstaller, Installer>();
+            SimpleIoc.Default.Register<ISetupScriptCreator, SetupScriptCreator>();
         }
 
         public MainViewModel Main
