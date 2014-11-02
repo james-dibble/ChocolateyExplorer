@@ -1,10 +1,10 @@
 ﻿namespace Chocolatey.OData
 {
     using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Chocolatey.DomainModel;
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Chocolatey.DomainModel;
 
     public interface IChocolateyFeed
     {
@@ -19,5 +19,7 @@ using Chocolatey.DomainModel;
         Task<IEnumerable<ChocolateyPackage>> GetNextPage();
 
         Task<IEnumerable<ChocolateyPackage>> SearchPackages(string criteria, CancellationToken cancellationToken);
+
+        Task<IEnumerable<ChocolateyPackageVersion>> GetPackageVersions(ChocolateyPackage package);
     }
 }

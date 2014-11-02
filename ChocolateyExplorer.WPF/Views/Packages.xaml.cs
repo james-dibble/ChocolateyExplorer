@@ -33,5 +33,12 @@ namespace ChocolateyExplorer.WPF.Views
             Process.Start(new ProcessStartInfo(hyperlink.NavigateUri.ToString()));
             e.Handled = true;
         }
+
+        private void TreeViewItem_OnItemSelected(object sender, RoutedEventArgs e)
+        {
+            var treeViewItem = e.OriginalSource as TreeViewItem;
+
+            treeViewItem.IsExpanded = true;
+        }
     }
 }
